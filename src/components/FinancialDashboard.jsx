@@ -34,6 +34,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
   const [editingDeviceTimeId, setEditingDeviceTimeId] = useState(null);
   const [deviceTimeInputValue, setDeviceTimeInputValue] = useState('');
   const [monthMetaTablePageIndex, setMonthMetaTablePageIndex] = useState(0);
+  const [allActivationMetas, setAllActivationMetas] = useState({});
 
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
