@@ -125,11 +125,16 @@ const saveDatabase = () => {
  * Load meta from database
  */
 export const loadMeta = async (deviceId, filterType, periodIndex) => {
-  await initializeSQL();
-
   try {
+    await initializeSQL();
+
+    if (!db) {
+      console.error('Database not initialized');
+      return 10000;
+    }
+
     const stmt = db.prepare(`
-      SELECT value FROM meta 
+      SELECT value FROM meta
       WHERE device_id = ? AND filter_type = ? AND period_index = ?
     `);
 
@@ -137,16 +142,19 @@ export const loadMeta = async (deviceId, filterType, periodIndex) => {
 
     if (stmt.step()) {
       const row = stmt.getAsObject();
+      const value = row.value;
       stmt.free();
-      return row.value;
+      console.log(`📚 Meta loaded from database: device ${deviceId}, ${filterType}, index ${periodIndex} = ${value}`);
+      return value;
     }
 
     stmt.free();
   } catch (error) {
-    console.error('Erro ao carregar meta:', error);
+    console.error('Error loading meta:', error);
   }
 
   // Default value if not found
+  console.log(`📚 Meta not found, returning default: device ${deviceId}, ${filterType}, index ${periodIndex}`);
   return 10000;
 };
 
@@ -154,22 +162,35 @@ export const loadMeta = async (deviceId, filterType, periodIndex) => {
  * Save meta to database
  */
 export const saveMeta = async (deviceId, filterType, periodIndex, value) => {
-  await initializeSQL();
-
   try {
+    await initializeSQL();
+
+    if (!db) {
+      console.error('Database not initialized, cannot save meta');
+      return false;
+    }
+
+    const numValue = parseFloat(value);
+    if (isNaN(numValue) || numValue < 0) {
+      console.error('Invalid meta value:', value);
+      return false;
+    }
+
     const stmt = db.prepare(`
       INSERT OR REPLACE INTO meta (device_id, filter_type, period_index, value, updated_at)
       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
     `);
 
-    stmt.bind([String(deviceId), filterType, periodIndex, parseFloat(value)]);
+    stmt.bind([String(deviceId), filterType, periodIndex, numValue]);
     stmt.step();
     stmt.free();
 
     saveDatabase();
-    console.log(`📊 Meta salva no SQLite para dispositivo ${deviceId}:`, value);
+    console.log(`✅ Meta saved to database: device ${deviceId}, ${filterType}, index ${periodIndex} = ${numValue}`);
+    return true;
   } catch (error) {
-    console.error('Erro ao salvar meta:', error);
+    console.error('Error saving meta:', error);
+    return false;
   }
 };
 
