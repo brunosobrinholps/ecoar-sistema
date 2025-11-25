@@ -5,6 +5,29 @@ import { DEVICE_ID_ALL, getAllDeviceIds } from '../data/devices';
 
 const ApiDataContext = createContext();
 
+/**
+ * Validate device data structure and quality
+ */
+const validateDeviceData = (deviceId, data) => {
+  const requiredArrays = [
+    'consumo_mensal',
+    'consumo_diario_mes_corrente',
+    'consumo_sem_sistema_mensal',
+    'consumo_sem_sistema_diario',
+    'minutos_desligado_mensal',
+    'minutos_desligado_diario'
+  ];
+
+  for (const arrayName of requiredArrays) {
+    if (!Array.isArray(data[arrayName]) || data[arrayName].length === 0) {
+      console.warn(`Device ${deviceId}: Missing or empty array ${arrayName}`);
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export const ApiDataProvider = ({ children }) => {
   const [selectedDeviceId, setSelectedDeviceId] = useState(33);
   const [periodFilter, setPeriodFilter] = useState('monthly');
