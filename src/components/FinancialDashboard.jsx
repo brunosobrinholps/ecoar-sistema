@@ -80,6 +80,19 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     loadAllMetas();
   }, [selectedDeviceId, periodFilter, currentMonthIndex, apiData]);
 
+  // Load device metas
+  useEffect(() => {
+    const loadDeviceMetas = async () => {
+      const metas = {};
+      for (const device of deviceRankings.slice(0, 3)) {
+        const meta = await loadActivationTimeMeta(device.id, periodFilter, selectedPeriodIndex);
+        metas[device.id] = meta;
+      }
+      setDeviceMetas(metas);
+    };
+    loadDeviceMetas();
+  }, [periodFilter, selectedPeriodIndex]);
+
   const handleCostInputChange = (e) => {
     setCostInputValue(e.target.value);
   };
