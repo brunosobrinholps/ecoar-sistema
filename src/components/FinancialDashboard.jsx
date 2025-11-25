@@ -918,7 +918,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               <p className="text-xs text-[#6B7560] font-semibold mb-2">Dispositivos Ativos</p>
               <div className="space-y-1 max-h-28 overflow-y-auto">
                 {deviceRankings.slice(0, 3).map((device) => {
-                  const deviceTimeMeta = loadActivationTimeMeta(device.id, periodFilter, selectedPeriodIndex);
+                  const deviceTimeMeta = deviceMetas[device.id] || (periodFilter === 'daily' ? 24 : 720);
                   const isEditing = editingDeviceTimeId === device.id;
 
                   return (
