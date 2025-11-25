@@ -38,15 +38,12 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  // Load meta from localStorage
-  const currentMeta = useMemo(() => {
-    return loadMetaFromStorage(selectedDeviceId, periodFilter, selectedPeriodIndex);
-  }, [selectedDeviceId, periodFilter, selectedPeriodIndex]);
-
-  // Load activation time meta from localStorage
-  const currentTimeMeta = useMemo(() => {
-    return loadActivationTimeMeta(selectedDeviceId, 'monthly', selectedPeriodIndex);
-  }, [selectedDeviceId, selectedPeriodIndex]);
+  // Use hook for meta storage with instant updates
+  const { currentMeta, saveMeta, currentTimeMeta, saveTimeMeta } = useMetaStorage(
+    selectedDeviceId,
+    periodFilter,
+    selectedPeriodIndex
+  );
 
   useEffect(() => {
     setCostInputValue(currentMeta.toString());
