@@ -67,7 +67,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     }
   };
 
-  const handleSaveCostMeta = () => {
+  const handleSaveCostMeta = async () => {
     const newValue = parseFloat(costInputValue);
     console.log('🔧 Tentando salvar meta:', {
       newValue,
@@ -78,7 +78,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     });
 
     if (!isNaN(newValue) && newValue > 0) {
-      saveMetaToStorage(selectedDeviceId, periodFilter, selectedPeriodIndex, newValue);
+      await saveMeta(newValue);
       setIsEditingMeta(false);
       console.log('✅ Meta salva com sucesso');
     } else {
