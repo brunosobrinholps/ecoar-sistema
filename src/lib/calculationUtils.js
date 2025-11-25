@@ -229,37 +229,37 @@ export const getActivationHours = (apiData, filterType, periodIndex) => {
   return Math.max(0, 720 - downtimeMinutes / 60);
 };
 
+import { loadMeta, saveMeta, loadActivationMeta, saveActivationMeta } from './sqliteDatabase.js';
+
 /**
- * Load meta from localStorage for a device
+ * Load meta from SQLite database for a device
  * @param {Number|String} deviceId - Device ID
  * @param {String} filterType - 'daily' or 'monthly'
  * @param {Number} periodIndex - Period index (month or day)
- * @returns {Number} Saved meta or default value
+ * @returns {Promise<Number>} Saved meta or default value
  */
-export const loadMetaFromStorage = (deviceId, filterType, periodIndex) => {
-  // Use a combined key that includes device to ensure different devices can have different metas
-  const key = `meta_device_${deviceId}_${filterType}_${periodIndex}`;
-  const stored = localStorage.getItem(key);
-
-  if (stored) {
-    return parseFloat(stored);
+export const loadMetaFromStorage = async (deviceId, filterType, periodIndex) => {
+  try {
+    return await loadMeta(deviceId, filterType, periodIndex);
+  } catch (error) {
+    console.error('Erro ao carregar meta:', error);
+    return 10000;
   }
-
-  // Return default value (can be different per device if needed)
-  return 10000;
 };
 
 /**
- * Save meta to localStorage
+ * Save meta to SQLite database
  * @param {Number|String} deviceId - Device ID
  * @param {String} filterType - 'daily' or 'monthly'
  * @param {Number} periodIndex - Period index
  * @param {Number} value - Meta value to save
  */
-export const saveMetaToStorage = (deviceId, filterType, periodIndex, value) => {
-  const key = `meta_device_${deviceId}_${filterType}_${periodIndex}`;
-  localStorage.setItem(key, String(value));
-  console.log(`📊 Meta salva para dispositivo ${deviceId}:`, key, '=', value);
+export const saveMetaToStorage = async (deviceId, filterType, periodIndex, value) => {
+  try {
+    await saveMeta(deviceId, filterType, periodIndex, value);
+  } catch (error) {
+    console.error('Erro ao salvar meta:', error);
+  }
 };
 
 /**
