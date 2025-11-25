@@ -176,7 +176,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
 
   const handleSaveTimeMeta = async () => {
     const newValue = parseFloat(timeMetaInputValue);
-    console.log('🔧 Tentando salvar meta de tempo mensal:', {
+    console.log('🔧 Attempting to save monthly time meta:', {
       newValue,
       deviceId: selectedDeviceId,
       periodIndex: selectedPeriodIndex,
@@ -184,11 +184,22 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     });
 
     if (!isNaN(newValue) && newValue > 0) {
-      await saveActivationTimeMeta(selectedDeviceId, 'monthly', selectedPeriodIndex, newValue);
-      setIsEditingTimeMeta(false);
-      console.log('✅ Meta mensal de tempo salva com sucesso');
+      try {
+        const success = await saveActivationTimeMeta(selectedDeviceId, 'monthly', selectedPeriodIndex, newValue);
+        if (success) {
+          setIsEditingTimeMeta(false);
+          console.log('✅ Monthly time meta saved successfully');
+        } else {
+          console.error('❌ Failed to save monthly time meta');
+          alert('Erro ao salvar meta mensal de tempo. Por favor, tente novamente.');
+        }
+      } catch (error) {
+        console.error('❌ Error saving monthly time meta:', error);
+        alert('Erro ao salvar meta mensal de tempo. Por favor, tente novamente.');
+      }
     } else {
-      console.warn('❌ Valor inválido para meta de tempo mensal:', timeMetaInputValue);
+      console.warn('❌ Invalid value for monthly time meta:', timeMetaInputValue);
+      alert('Por favor, insira um valor válido para a meta mensal de tempo');
     }
   };
 
