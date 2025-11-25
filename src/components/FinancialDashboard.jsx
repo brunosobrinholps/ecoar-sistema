@@ -135,7 +135,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
 
   const handleSaveDeviceTimeMeta = async (deviceId) => {
     const newValue = parseFloat(deviceTimeInputValue);
-    console.log('🔧 Tentando salvar meta de tempo:', {
+    console.log('🔧 Attempting to save device time meta:', {
       newValue,
       deviceId,
       periodFilter,
@@ -144,12 +144,23 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     });
 
     if (!isNaN(newValue) && newValue > 0) {
-      await saveActivationTimeMeta(deviceId, periodFilter, selectedPeriodIndex, newValue);
-      setEditingDeviceTimeId(null);
-      setDeviceTimeInputValue('');
-      console.log('✅ Meta de tempo salva com sucesso');
+      try {
+        const success = await saveActivationTimeMeta(deviceId, periodFilter, selectedPeriodIndex, newValue);
+        if (success) {
+          setEditingDeviceTimeId(null);
+          setDeviceTimeInputValue('');
+          console.log('✅ Device time meta saved successfully');
+        } else {
+          console.error('❌ Failed to save device time meta');
+          alert('Erro ao salvar meta de tempo. Por favor, tente novamente.');
+        }
+      } catch (error) {
+        console.error('❌ Error saving device time meta:', error);
+        alert('Erro ao salvar meta de tempo. Por favor, tente novamente.');
+      }
     } else {
-      console.warn('❌ Valor inválido para meta de tempo:', deviceTimeInputValue);
+      console.warn('❌ Invalid value for time meta:', deviceTimeInputValue);
+      alert('Por favor, insira um valor válido para a meta de tempo');
     }
   };
 
