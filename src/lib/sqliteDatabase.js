@@ -3,32 +3,58 @@ import initSqlJs from 'sql.js';
 let SQL = null;
 let db = null;
 const DB_STORAGE_KEY = 'ecoar_sqlite_db';
+let initPromise = null;
 
 /**
- * Initialize SQLite database
+ * Initialize SQLite database with proper error handling
  */
 export const initializeSQL = async () => {
+  // Return existing promise if already initializing
+  if (initPromise) {
+    return initPromise;
+  }
+
+  // Return existing database if already initialized
   if (SQL && db) {
     return db;
   }
 
-  if (!SQL) {
-    SQL = await initSqlJs();
-  }
+  initPromise = (async () => {
+    try {
+      if (!SQL) {
+        SQL = await initSqlJs();
+      }
 
-  // Try to load existing database from localStorage
-  const savedData = localStorage.getItem(DB_STORAGE_KEY);
-  
-  if (savedData) {
-    const data = new Uint8Array(JSON.parse(savedData));
-    db = new SQL.Database(data);
-  } else {
-    db = new SQL.Database();
-    // Create tables if new database
-    createTables();
-  }
+      // Try to load existing database from localStorage
+      const savedData = localStorage.getItem(DB_STORAGE_KEY);
 
-  return db;
+      if (savedData) {
+        try {
+          const data = new Uint8Array(JSON.parse(savedData));
+          db = new SQL.Database(data);
+          console.log('✅ Database loaded from localStorage');
+        } catch (parseError) {
+          console.warn('Error parsing saved database, creating new one:', parseError);
+          db = new SQL.Database();
+          createTables();
+        }
+      } else {
+        db = new SQL.Database();
+        // Create tables if new database
+        createTables();
+        console.log('✅ New database created');
+      }
+
+      return db;
+    } catch (error) {
+      console.error('Critical error initializing database:', error);
+      throw error;
+    } finally {
+      initPromise = null;
+    }
+  })();
+
+  return initPromise;
 };
 
 /**
@@ -65,14 +91,34 @@ const createTables = () => {
 };
 
 /**
- * Save database to localStorage
+ * Save database to localStorage with error handling
  */
 const saveDatabase = () => {
-  if (!db) return;
-  
-  const data = db.export();
-  const arr = Array.from(data);
-  localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(arr));
+  if (!db) {
+    console.warn('Cannot save database: db is null');
+    return;
+  }
+
+  try {
+    const data = db.export();
+    const arr = Array.from(data);
+    const jsonStr = JSON.stringify(arr);
+
+    // Check localStorage size
+    const sizeInKB = jsonStr.length / 1024;
+    if (sizeInKB > 5000) {
+      console.warn(`Database size is large (${sizeInKB.toFixed(2)} KB), consider archiving old data`);
+    }
+
+    localStorage.setItem(DB_STORAGE_KEY, jsonStr);
+    console.log(`✅ Database saved to localStorage (${sizeInKB.toFixed(2)} KB)`);
+  } catch (error) {
+    console.error('Error saving database to localStorage:', error);
+    // Check if it's a quota exceeded error
+    if (error.name === 'QuotaExceededError') {
+      console.error('localStorage quota exceeded. Try clearing old data.');
+    }
+  }
 };
 
 /**
