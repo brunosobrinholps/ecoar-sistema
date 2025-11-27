@@ -201,6 +201,53 @@ src/
 
 ---
 
+## 🚀 Deploy no GitHub Pages (branch `gh-pages`)
+
+Use este passo a passo para publicar o projeto em **https://metiieus.github.io/Ecoar/** sem misturar arquivos de build com o código-fonte.
+
+### 1) Instalar a dependência
+
+```bash
+npm install --save-dev gh-pages
+```
+
+### 2) Configurações necessárias (já aplicadas)
+
+- `vite.config.js`: `base: '/Ecoar/'` para que os assets sejam resolvidos a partir do caminho do repositório.
+- `package.json`: `homepage` apontando para `https://metiieus.github.io/Ecoar/`.
+- `.gitignore`: inclui `dist/` para manter o build fora da branch `main`.
+
+### 3) Scripts de deploy via `gh-pages`
+
+```json
+"scripts": {
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+}
+```
+
+O `predeploy` garante que o build mais recente esteja em `dist/` antes da publicação. O comando `deploy` publica a pasta `dist/` na branch **gh-pages**.
+
+### 4) Fluxo para publicar
+
+1. Confirme que está na branch `main` e com código atualizado: `git checkout main && git pull`.
+2. Instale dependências (se necessário): `npm install`.
+3. Execute o deploy: `npm run deploy`.
+4. O pacote `gh-pages` criará (ou atualizará) a branch `gh-pages` com o conteúdo de `dist/` e fará o push automático.
+
+### 5) Ativar o GitHub Pages
+
+No repositório **Ecoar** no GitHub:
+
+1. Acesse **Settings → Pages**.
+2. Em **Source**, escolha **Deploy from a branch**.
+3. Selecione a branch **gh-pages** e o diretório **/(root)**.
+4. Salve. A URL publicada será `https://metiieus.github.io/Ecoar/`.
+
+> Sempre mantenha o desenvolvimento na branch `main` e use apenas a `gh-pages` para o conteúdo gerado. Como `dist/` está no `.gitignore`, nada do build será commitado junto ao código-fonte.
+
+---
+
 ## 🚀 Como Executar
 
 ### Pré-requisitos
