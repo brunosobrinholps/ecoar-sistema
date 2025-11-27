@@ -16,7 +16,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   // 📦 Caminho base para deploy no GitHub Pages
-  base: '/ecoarenergy-dashboard/',
+  base: '/Ecoar/',   // <<<<<< CORRETO
 
   // 🧭 Alias para imports
   resolve: {
