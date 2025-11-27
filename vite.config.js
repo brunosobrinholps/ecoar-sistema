@@ -5,27 +5,29 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // 🔧 Define variáveis de ambiente (usadas no build)
+  // 🔧 Variáveis de ambiente (para rodar build sem erro)
   define: {
     'process.env.VITE_API_URL': JSON.stringify(
       process.env.VITE_API_URL || 'http://localhost:5175'
     ),
   },
 
-  // 🧩 Plugins do projeto
+  // 🧩 Plugins
   plugins: [react(), tailwindcss()],
 
-  // 📦 Caminho base para deploy no GitHub Pages
-  base: '/ecoarenergy-dashboard/',
+  // 📦 Caminho correto para o GitHub Pages
+  // ⚠️ TEM que ser exatamente o nome do repositório:
+  // https://metiieus.github.io/Ecoar/
+  base: '/Ecoar/',
 
-  // 🧭 Alias para imports
+  // 🧭 Alias
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
 
-  // 🌐 Configuração do servidor de desenvolvimento local
+  // 🌐 Dev server
   server: {
     allowedHosts: ['*'],
     proxy: {
@@ -37,7 +39,7 @@ export default defineConfig({
     },
   },
 
-  // ⚙️ Build otimizado para produção
+  // ⚙️ Build
   build: {
     outDir: 'dist',
     emptyOutDir: true,
