@@ -166,43 +166,28 @@ export const getComparisonWithPreviousPeriod = (
   filterType,
   currentPeriodIndex
 ) => {
-  if (!Array.isArray(filteredData) || filteredData.length < 2) {
+  if (!Array.isArray(filteredData) || filteredData.length === 0) {
     return { percentChange: 0, currentValue: 0, previousValue: 0 };
   }
 
   const currentIndex = Math.min(currentPeriodIndex, filteredData.length - 1);
+  const periodData = filteredData[currentIndex];
 
-  if (filterType === 'daily') {
-    // Compare with previous day
-    if (currentIndex < 1) {
-      return { percentChange: 0, currentValue: 0, previousValue: 0 };
-    }
-
-    const currentValue = filteredData[currentIndex]?.consumo || 0;
-    const previousValue = filteredData[currentIndex - 1]?.consumo || 0;
-
-    if (previousValue === 0) {
-      return { percentChange: 0, currentValue, previousValue };
-    }
-
-    const percentChange = ((previousValue - currentValue) / previousValue) * 100;
-    return { percentChange, currentValue, previousValue };
-  }
-
-  // Monthly comparison
-  if (currentIndex < 1) {
+  if (!periodData) {
     return { percentChange: 0, currentValue: 0, previousValue: 0 };
   }
 
-  const currentValue = filteredData[currentIndex]?.consumo || 0;
-  const previousValue = filteredData[currentIndex - 1]?.consumo || 0;
+  // Calculate economy percentage: (consumoSemSistema - consumo) / consumoSemSistema * 100
+  const consumoWithoutSystem = periodData.consumoSemSistema || 0;
+  const consumoWithSystem = periodData.consumo || 0;
+  const economy = Math.max(0, consumoWithoutSystem - consumoWithSystem);
 
-  if (previousValue === 0) {
-    return { percentChange: 0, currentValue, previousValue };
+  if (consumoWithoutSystem === 0) {
+    return { percentChange: 0, currentValue: consumoWithSystem, previousValue: consumoWithoutSystem };
   }
 
-  const percentChange = ((previousValue - currentValue) / previousValue) * 100;
-  return { percentChange, currentValue, previousValue };
+  const percentChange = (economy / consumoWithoutSystem) * 100;
+  return { percentChange, currentValue: consumoWithSystem, previousValue: consumoWithoutSystem };
 };
 
 /**
