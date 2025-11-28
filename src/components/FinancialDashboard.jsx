@@ -234,26 +234,18 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
   }, [filteredConsumptionData, periodFilter, selectedPeriodIndex]);
 
   // Calculate total economy (for selected period)
-  // Economy = consumo_without_system - consumo_with_system
+  // Economy = sum of consumo_sem_sistema
   const totalEconomy = useMemo(() => {
     if (!Array.isArray(filteredConsumptionData) || filteredConsumptionData.length === 0) return 0;
 
     if (periodFilter === 'daily') {
-      // For daily, sum all days in the current month
-      const consumoWithoutSystem = filteredConsumptionData.reduce((sum, item) => sum + item.consumo, 0);
-      const consumoWithSystem = filteredConsumptionData.reduce((sum, item) => sum + item.consumoSemSistema, 0);
-      return Math.max(0, consumoWithoutSystem - consumoWithSystem);
+      // For daily, sum all consumoSemSistema in the current month
+      return filteredConsumptionData.reduce((sum, item) => sum + (item.consumoSemSistema || 0), 0);
     }
 
-    // For monthly, use only the selected month
-    const periodData = filteredConsumptionData[selectedPeriodIndex];
-    if (periodData) {
-      const consumoWithoutSystem = periodData.consumo || 0;
-      const consumoWithSystem = periodData.consumoSemSistema > 0 ? (periodData.consumoSemSistema || 0) : 0;
-      return Math.max(0, consumoWithoutSystem - consumoWithSystem);
-    }
-    return 0;
-  }, [filteredConsumptionData, periodFilter, selectedPeriodIndex]);
+    // For monthly, sum ALL months of consumo_sem_sistema_mensal
+    return filteredConsumptionData.reduce((sum, item) => sum + (item.consumoSemSistema || 0), 0);
+  }, [filteredConsumptionData, periodFilter]);
 
   // Calculate economy rate
   const economyRate = useMemo(() => {
