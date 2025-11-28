@@ -142,7 +142,8 @@ export const ApiDataProvider = ({ children }) => {
         consumo_sem_sistema_diario: [],
         minutos_desligado_mensal: [],
         minutos_desligado_diario: [],
-        ocupacao_mensal: []
+        ocupacao_mensal: [],
+        ocupacao_diaria: []
       };
     }
 
