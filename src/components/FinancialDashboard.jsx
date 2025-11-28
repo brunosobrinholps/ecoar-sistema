@@ -641,19 +641,19 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           </div>
 
           {/* Ocupação Card */}
-          <div className="bg-white rounded-lg p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
+          <div className="bg-gradient-to-br from-[#1F4532] to-[#2D5740] rounded-lg p-4 shadow-md border border-[#1F4532]/20 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-bold text-[#6B7560] uppercase tracking-wide">
+              <p className="text-xs font-bold text-[#F0EAD2] uppercase tracking-wide">
                 {periodFilter === 'daily' ? 'Ocupação Diária' : 'Ocupação Mensal'}
               </p>
               <Zap className="w-4 h-4 text-[#A3B18A]" />
             </div>
-            <p className="text-2xl font-bold text-[#1F4532] mb-2">
+            <p className="text-2xl font-bold text-[#F0EAD2] mb-2">
               {periodFilter === 'daily'
                 ? apiData?.ocupacao_diaria ? apiData.ocupacao_diaria[selectedPeriodIndex]?.toFixed(1) || 0 : 0
                 : apiData?.ocupacao_mensal ? apiData.ocupacao_mensal[selectedPeriodIndex]?.toFixed(1) || 0 : 0}%
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#D4CFC0]">
               {periodFilter === 'monthly' ? monthNames[selectedPeriodIndex] : `Dia ${selectedPeriodIndex + 1}`}
             </p>
           </div>
