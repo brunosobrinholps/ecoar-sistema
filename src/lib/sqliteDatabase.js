@@ -29,11 +29,14 @@ export const initializeSQL = async () => {
         console.log('📖 Loading SQL.js library...');
 
         try {
+          // Get the base URL for WASM file location
+          const baseUrl = import.meta.env.BASE_URL || '/';
+          const wasmPath = `${baseUrl}sql-wasm.wasm`;
+
           SQL = await initSqlJs({
             locateFile: file => {
-              const filePath = `/${file}`;
-              console.log('📖 Locating WASM file:', file, '-> looking at:', filePath);
-              return filePath;
+              console.log('📖 Locating WASM file:', file, '-> using path:', wasmPath);
+              return wasmPath;
             }
           });
           console.log('✅ SQL.js library loaded successfully');
