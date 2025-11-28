@@ -613,35 +613,6 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
             )}
           </div>
 
-          {/* Total Consumption and Period Detail Cards */}
-          <div className="space-y-3">
-            <div className="bg-white rounded-lg p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-bold text-[#6B7560] uppercase tracking-wide">Consumo Total</p>
-                <Zap className="w-4 h-4 text-blue-600" />
-              </div>
-              <p className="text-2xl font-bold text-gray-900 mb-2">
-                R${ensureNonNegative(totalConsumption).toLocaleString('pt-BR')}
-              </p>
-              <p className="text-xs text-gray-500">
-                {periodFilter === 'daily' ? `Dia ${selectedPeriodIndex + 1}` : `Mês - ${monthNames[selectedPeriodIndex]}`}
-              </p>
-            </div>
-
-            {/* Current Month Consumption Card */}
-            <div className="bg-gradient-to-br from-[#F0EAD2] to-white rounded-lg p-4 shadow-md border border-[#D4CFC0] hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-bold text-[#1F4532] uppercase tracking-wide">Consumo Total do Mês</p>
-                <Zap className="w-4 h-4 text-[#A3B18A]" />
-              </div>
-              <p className="text-2xl font-bold text-[#A3B18A] mb-1">
-                R${ensureNonNegative(selectedPeriodConsumption).toLocaleString('pt-BR')}
-              </p>
-              <p className="text-xs text-[#6B7560]">
-                {periodFilter === 'monthly' ? monthNames[selectedPeriodIndex] : `Período: ${monthNames[Math.floor(new Date().getMonth())]}`}
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Economia Total - Gauge Chart */}
