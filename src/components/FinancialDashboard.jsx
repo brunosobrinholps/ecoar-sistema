@@ -686,7 +686,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         <div className="bg-white rounded-lg p-6 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow col-span-1 lg:col-span-2 flex flex-col h-auto lg:h-96">
           <div className="mb-4">
             <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">
-              Economia {periodFilter === 'daily' ? 'Diária' : 'Total'}
+              Economia Total
             </p>
             <p className="text-xs text-gray-500 mt-1">Percentual de Economia Alcançada</p>
           </div>
@@ -698,7 +698,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
                   nrOfLevels={5}
                   colors={['#d1fae5', '#6ee7b7', '#10b981', '#047857', '#065f46']}
                   arcPadding={0.1}
-                  percent={Math.min(economyRate / 100, 1)}
+                  percent={Math.min(fixedEconomyRate / 100, 1)}
                   textColor="#1f2937"
                   needleColor="#1f2937"
                   needleBaseColor="#1f2937"
@@ -710,15 +710,15 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
             <div className="space-y-6 flex-shrink-0">
               <div>
                 <p className="text-xs text-[#6B7560] font-semibold mb-2">Consumo Total</p>
-                <p className="text-3xl font-bold text-gray-900">R$ {(ensureNonNegative(totalConsumption) / 1000).toFixed(1)}k</p>
+                <p className="text-3xl font-bold text-gray-900">R$ {(ensureNonNegative(fixedTotalConsumption) / 1000).toFixed(1)}k</p>
               </div>
               <div>
                 <p className="text-xs text-[#6B7560] font-semibold mb-2">Economia Alcançada</p>
-                <p className="text-3xl font-bold text-[#1F4532]">R$ {(ensureNonNegative(totalEconomy) / 1000).toFixed(1)}k</p>
+                <p className="text-3xl font-bold text-[#1F4532]">R$ {(ensureNonNegative(fixedTotalEconomy) / 1000).toFixed(1)}k</p>
               </div>
               <div>
                 <p className="text-xs text-[#6B7560] font-semibold mb-2">Taxa de Economia</p>
-                <p className="text-2xl font-bold text-[#A3B18A]">{economyRate.toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-[#A3B18A]">{fixedEconomyRate.toFixed(1)}%</p>
               </div>
             </div>
           </div>
