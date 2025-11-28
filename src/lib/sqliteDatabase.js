@@ -434,3 +434,7 @@ export const clearDatabase = async () => {
     console.error('Erro ao limpar banco:', error);
   }
 };
+
+// Initialize database on module load
+console.log('📖 Initializing SQLite database module...');
+initializeSQL().catch(err => console.error('⚠️ Database initialization deferred until first use:', err));
