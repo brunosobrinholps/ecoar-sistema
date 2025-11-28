@@ -257,14 +257,37 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     return getComparisonWithPreviousPeriod(filteredConsumptionData, periodFilter, selectedPeriodIndex);
   }, [filteredConsumptionData, periodFilter, selectedPeriodIndex]);
 
-  // Get monthly reduction (only used when in monthly view, should match previousPeriodComparison)
+  // Get monthly data for reduction comparison (always use monthly data regardless of current filter)
+  const monthlyData = useMemo(() => {
+    if (!apiData || !Array.isArray(apiData.consumo_mensal)) return [];
+    return apiData.consumo_mensal.map((consumo, index) => {
+      const consumoVal = ensureNonNegative(consumo);
+      const consumoSemSistemaApi = apiData.consumo_sem_sistema_mensal?.[index];
+
+      let consumoSemSistemaVal;
+      if (consumoVal === 0) {
+        consumoSemSistemaVal = 0;
+      } else if (consumoSemSistemaApi !== undefined && consumoSemSistemaApi !== null && consumoSemSistemaApi !== 0) {
+        consumoSemSistemaVal = ensureNonNegative(consumoSemSistemaApi);
+      } else if (consumoSemSistemaApi === 0) {
+        consumoSemSistemaVal = 0;
+      } else {
+        consumoSemSistemaVal = ensureNonNegative(consumoVal / 0.8);
+      }
+
+      return {
+        period: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][index],
+        index,
+        consumo: consumoVal,
+        consumoSemSistema: consumoSemSistemaVal
+      };
+    });
+  }, [apiData]);
+
+  // Get monthly reduction (always compares current month with previous month)
   const monthlyReduction = useMemo(() => {
-    // Only calculate for monthly view and use the same logic as previousPeriodComparison
-    if (periodFilter !== 'monthly') {
-      return { percentChange: 0, currentValue: 0, previousValue: 0 };
-    }
-    return previousPeriodComparison;
-  }, [periodFilter, previousPeriodComparison]);
+    return getComparisonWithPreviousPeriod(monthlyData, 'monthly', currentMonthIndex);
+  }, [monthlyData, currentMonthIndex]);
 
   // Get activation hours
   const activationHours = useMemo(() => {
@@ -444,7 +467,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         },
         {
           name: 'Meta',
-          data: chartData.map(() => ensureNonNegative(currentMeta / chartData.length)),
+          data: chartData.map(() => ensureNonNegative(currentMeta)),
           type: 'line',
           smooth: false,
           lineStyle: { width: 2, color: '#f59e0b', type: 'dashed' },
@@ -742,7 +765,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           </div>
 
           {/* Redução Mensal Card */}
-          {periodFilter === 'monthly' && (
+          {(periodFilter === 'monthly' || periodFilter === 'daily') && (
             <div className={`bg-gradient-to-br rounded-lg p-5 shadow-md border text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit ${
               monthlyReduction.percentChange >= 0
                 ? 'border-[#10b981]/20'
