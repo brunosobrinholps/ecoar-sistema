@@ -47,7 +47,8 @@ export const initializeSQL = async () => {
           const wasmPath = `${baseUrl}sql-wasm.wasm`;
 
           // Dynamic import to handle sql.js module properly
-          const initSqlJs = await import('sql.js').then(mod => mod.default);
+          const sqlJsModule = await import('sql.js');
+          const initSqlJs = sqlJsModule.default || sqlJsModule;
           SQL = await initSqlJs({
             locateFile: file => {
               console.log('📖 Locating WASM file:', file, '-> using path:', wasmPath);
