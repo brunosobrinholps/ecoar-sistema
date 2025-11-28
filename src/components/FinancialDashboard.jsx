@@ -613,10 +613,44 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
             )}
           </div>
 
+          {/* Redução Card */}
+          <div className={`bg-gradient-to-br rounded-lg p-5 shadow-md border text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit ${
+            previousPeriodComparison.percentChange >= 0
+              ? 'border-[#10b981]/20'
+              : 'from-red-500 to-red-600 border-red-700/20'
+          }`}
+          style={previousPeriodComparison.percentChange >= 0 ? { background: '#10b981' } : undefined}>
+            <p className="text-3xl font-bold mb-1 text-center">{Math.abs(previousPeriodComparison.percentChange).toFixed(1)}%</p>
+            <p className="text-xs font-semibold text-center leading-tight">
+              {previousPeriodComparison.percentChange >= 0 ? '↓ Redução' : '↑ Aumento'} vs {periodFilter === 'daily' ? 'Dia anterior' : 'Mês anterior'}
+            </p>
+          </div>
+
+          {/* Economia Total R$ Card */}
+          <div className="bg-gradient-to-br from-[#A3B18A] to-[#1F4532] rounded-lg p-5 shadow-md border border-[#1F4532]/20 text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit">
+            <p className="text-3xl font-bold mb-1 text-center">{periodFilter === 'daily' ? activationHours.toFixed(1) : totalEconomy.toFixed(0)}</p>
+            <p className="text-xs font-semibold text-center leading-tight text-[#F0EAD2]">
+              {periodFilter === 'daily' ? 'Horas de Atuação' : 'Economia Total (R$)'}
+            </p>
+          </div>
+
+          {/* Ocupação Mensal Card */}
+          <div className="bg-white rounded-lg p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-bold text-[#6B7560] uppercase tracking-wide">Ocupação Mensal</p>
+              <Zap className="w-4 h-4 text-[#A3B18A]" />
+            </div>
+            <p className="text-2xl font-bold text-[#1F4532] mb-2">
+              {apiData?.ocupacao_mensal ? apiData.ocupacao_mensal[selectedPeriodIndex]?.toFixed(1) || 0 : 0}%
+            </p>
+            <p className="text-xs text-gray-500">
+              {periodFilter === 'monthly' ? monthNames[selectedPeriodIndex] : `Período: ${monthNames[Math.floor(new Date().getMonth())]}`}
+            </p>
+          </div>
         </div>
 
         {/* Economia Total - Gauge Chart */}
-        <div className="bg-white rounded-lg p-6 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow col-span-1 sm:col-span-2 flex flex-col h-auto sm:h-96">
+        <div className="bg-white rounded-lg p-6 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow col-span-1 lg:col-span-2 flex flex-col h-auto lg:h-96">
           <div className="mb-4">
             <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">
               Economia {periodFilter === 'daily' ? 'Diária' : 'Total'}
