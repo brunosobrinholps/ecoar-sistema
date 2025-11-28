@@ -688,71 +688,74 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           </div>
         </div>
 
-        {/* Período Selecionado Card */}
-        <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg p-4 shadow-md border border-blue-200 hover:shadow-lg transition-shadow h-fit col-span-1 lg:col-span-2">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">
-              {periodFilter === 'daily' ? `Dia ${selectedPeriodIndex + 1}` : monthNames[selectedPeriodIndex]}
-            </p>
-            {periodFilter === 'daily' ? (
-              <input
-                type="range"
-                min="0"
-                max={filteredConsumptionData.length - 1}
-                value={selectedPeriodIndex}
-                onChange={(e) => handlePeriodIndexChange(parseInt(e.target.value))}
-                className="w-20"
-              />
-            ) : (
-              <select
-                value={selectedPeriodIndex}
-                onChange={(e) => handlePeriodIndexChange(parseInt(e.target.value))}
-                className="text-xs px-2 py-1 border border-blue-300 rounded bg-white text-[#1F4532] hover:border-blue-500 transition-colors appearance-none cursor-pointer"
-              >
-                {monthNames.map((name, index) => (
-                  <option key={index} value={String(index)}>{name}</option>
-                ))}
-              </select>
-            )}
-          </div>
-          <div className="mb-3 space-y-2">
-            <div>
-              <p className="text-xs text-[#6B7560] mb-1">Consumo sem Sistema</p>
-              <p className="text-2xl font-bold text-gray-900">
-                R${ensureNonNegative(currentPeriodData?.consumo || 0).toLocaleString('pt-BR')}
+        {/* Right Column - Período Selecionado and Redução Mensal */}
+        <div className="flex flex-col gap-4 col-span-1 lg:col-span-2">
+          {/* Período Selecionado Card */}
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg p-4 shadow-md border border-blue-200 hover:shadow-lg transition-shadow h-fit">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">
+                {periodFilter === 'daily' ? `Dia ${selectedPeriodIndex + 1}` : monthNames[selectedPeriodIndex]}
+              </p>
+              {periodFilter === 'daily' ? (
+                <input
+                  type="range"
+                  min="0"
+                  max={filteredConsumptionData.length - 1}
+                  value={selectedPeriodIndex}
+                  onChange={(e) => handlePeriodIndexChange(parseInt(e.target.value))}
+                  className="w-20"
+                />
+              ) : (
+                <select
+                  value={selectedPeriodIndex}
+                  onChange={(e) => handlePeriodIndexChange(parseInt(e.target.value))}
+                  className="text-xs px-2 py-1 border border-blue-300 rounded bg-white text-[#1F4532] hover:border-blue-500 transition-colors appearance-none cursor-pointer"
+                >
+                  {monthNames.map((name, index) => (
+                    <option key={index} value={String(index)}>{name}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <div className="mb-3 space-y-2">
+              <div>
+                <p className="text-xs text-[#6B7560] mb-1">Consumo sem Sistema</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  R${ensureNonNegative(currentPeriodData?.consumo || 0).toLocaleString('pt-BR')}
+                </p>
+              </div>
+              <div className="border-t border-blue-200 pt-2">
+                <p className="text-xs text-[#6B7560] mb-1">Consumo com Sistema</p>
+                <p className="text-lg font-bold text-blue-600">
+                  R${ensureNonNegative(currentPeriodData?.consumoSemSistema || 0).toLocaleString('pt-BR')}
+                </p>
+              </div>
+            </div>
+            <div className="bg-blue-50/50 rounded p-2 space-y-1">
+              <p className="text-xs text-[#6B7560]">Meta: <span className="font-semibold text-gray-900">R${ensureNonNegative(currentMeta).toLocaleString('pt-BR')}</span></p>
+              <p className="text-xs text-[#6B7560]">
+                Economia: <span className="font-semibold text-[#1F4532]">
+                  R${ensureNonNegative((currentPeriodData?.consumo || 0) - (currentPeriodData?.consumoSemSistema || 0)).toLocaleString('pt-BR')}
+                </span>
               </p>
             </div>
-            <div className="border-t border-blue-200 pt-2">
-              <p className="text-xs text-[#6B7560] mb-1">Consumo com Sistema</p>
-              <p className="text-lg font-bold text-blue-600">
-                R${ensureNonNegative(currentPeriodData?.consumoSemSistema || 0).toLocaleString('pt-BR')}
-              </p>
-            </div>
           </div>
-          <div className="bg-blue-50/50 rounded p-2 space-y-1">
-            <p className="text-xs text-[#6B7560]">Meta: <span className="font-semibold text-gray-900">R${ensureNonNegative(currentMeta).toLocaleString('pt-BR')}</span></p>
-            <p className="text-xs text-[#6B7560]">
-              Economia: <span className="font-semibold text-[#1F4532]">
-                R${ensureNonNegative((currentPeriodData?.consumo || 0) - (currentPeriodData?.consumoSemSistema || 0)).toLocaleString('pt-BR')}
-              </span>
-            </p>
-          </div>
-        </div>
 
-        {/* Redução Mensal Card */}
-        {periodFilter === 'monthly' && (
-          <div className={`bg-gradient-to-br rounded-lg p-5 shadow-md border text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit col-span-1 lg:col-span-1 ${
-            monthlyReduction.percentChange >= 0
-              ? 'border-[#10b981]/20'
-              : 'from-red-500 to-red-600 border-red-700/20'
-          }`}
-          style={monthlyReduction.percentChange >= 0 ? { background: '#10b981' } : undefined}>
-            <p className="text-3xl font-bold mb-1 text-center">{Math.abs(monthlyReduction.percentChange).toFixed(1)}%</p>
-            <p className="text-xs font-semibold text-center leading-tight">
-              {monthlyReduction.percentChange >= 0 ? '↓ Redução' : '↑ Aumento'} Mensal
-            </p>
-          </div>
-        )}
+          {/* Redução Mensal Card */}
+          {periodFilter === 'monthly' && (
+            <div className={`bg-gradient-to-br rounded-lg p-5 shadow-md border text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit ${
+              monthlyReduction.percentChange >= 0
+                ? 'border-[#10b981]/20'
+                : 'from-red-500 to-red-600 border-red-700/20'
+            }`}
+            style={monthlyReduction.percentChange >= 0 ? { background: '#10b981' } : undefined}>
+              <p className="text-3xl font-bold mb-1 text-center">{Math.abs(monthlyReduction.percentChange).toFixed(1)}%</p>
+              <p className="text-xs font-semibold text-center leading-tight">
+                {monthlyReduction.percentChange >= 0 ? '↓ Redução' : '↑ Aumento'} Mensal
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Info and Filter Bar */}
