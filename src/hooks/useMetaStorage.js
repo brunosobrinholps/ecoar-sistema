@@ -51,10 +51,15 @@ export const useMetaStorage = (deviceId, periodFilter, selectedPeriodIndex) => {
     async (value) => {
       try {
         console.log(`💾 Saving meta: device ${deviceId}, ${periodFilter}, index ${selectedPeriodIndex}, value ${value}`);
-        await saveMetaToStorage(deviceId, periodFilter, selectedPeriodIndex, value);
-        setCurrentMeta(value);
-        console.log(`✅ Meta save callback completed`);
-        return true;
+        const result = await saveMetaToStorage(deviceId, periodFilter, selectedPeriodIndex, value);
+        if (result) {
+          setCurrentMeta(value);
+          console.log(`✅ Meta save callback completed successfully`);
+          return true;
+        } else {
+          console.error('❌ Meta save callback failed - database returned false');
+          return false;
+        }
       } catch (error) {
         console.error('Error saving meta:', error);
         return false;
