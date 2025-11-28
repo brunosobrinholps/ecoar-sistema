@@ -36,6 +36,7 @@ export const initializeSQL = async () => {
   }
 
   console.log('📖 Starting database initialization...');
+  console.log(`📖 localStorage availability: ${canUseLocalStorage ? 'YES' : 'NO (data will be session-only)'}`);
 
   initPromise = (async () => {
     try {
