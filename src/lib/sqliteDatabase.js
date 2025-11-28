@@ -263,10 +263,15 @@ export const saveActivationMeta = async (deviceId, filterType, periodIndex, valu
     `);
 
     stmt.bind([String(deviceId), filterType, periodIndex, numValue]);
-    stmt.step();
+    const executeResult = stmt.step();
     stmt.free();
 
-    saveDatabase();
+    const saved = saveDatabase();
+    if (!saved) {
+      console.error('Failed to save activation meta to localStorage');
+      return false;
+    }
+
     console.log(`✅ Activation meta saved: device ${deviceId}, ${filterType}, index ${periodIndex} = ${numValue}h`);
     return true;
   } catch (error) {
