@@ -663,7 +663,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
                 <GaugeChart
                   id="economia-gauge"
                   nrOfLevels={5}
-                  colors={['#065f46', '#047857', '#10b981', '#6ee7b7', '#d1fae5']}
+                  colors={['#d1fae5', '#6ee7b7', '#10b981', '#047857', '#065f46']}
                   arcPadding={0.1}
                   percent={Math.min(economyRate / 100, 1)}
                   textColor="#1f2937"
