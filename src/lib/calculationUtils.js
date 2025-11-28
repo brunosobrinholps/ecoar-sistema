@@ -177,9 +177,10 @@ export const getComparisonWithPreviousPeriod = (
     return { percentChange: 0, currentValue: 0, previousValue: 0 };
   }
 
-  // Calculate economy percentage: (consumoSemSistema - consumo) / consumoSemSistema * 100
-  const consumoWithoutSystem = periodData.consumoSemSistema || 0;
-  const consumoWithSystem = periodData.consumo || 0;
+  // Calculate economy percentage: (consumo - consumoSemSistema) / consumo * 100
+  // where consumo = consumption without system, consumoSemSistema = consumption with system
+  const consumoWithoutSystem = periodData.consumo || 0;
+  const consumoWithSystem = periodData.consumoSemSistema || 0;
   const economy = Math.max(0, consumoWithoutSystem - consumoWithSystem);
 
   if (consumoWithoutSystem === 0) {
