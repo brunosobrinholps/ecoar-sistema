@@ -96,7 +96,7 @@ const createTables = () => {
 const saveDatabase = () => {
   if (!db) {
     console.warn('Cannot save database: db is null');
-    return;
+    return false;
   }
 
   try {
@@ -112,12 +112,14 @@ const saveDatabase = () => {
 
     localStorage.setItem(DB_STORAGE_KEY, jsonStr);
     console.log(`✅ Database saved to localStorage (${sizeInKB.toFixed(2)} KB)`);
+    return true;
   } catch (error) {
     console.error('Error saving database to localStorage:', error);
     // Check if it's a quota exceeded error
     if (error.name === 'QuotaExceededError') {
       console.error('localStorage quota exceeded. Try clearing old data.');
     }
+    return false;
   }
 };
 
