@@ -15,7 +15,8 @@ const validateDeviceData = (deviceId, data) => {
     'consumo_sem_sistema_mensal',
     'consumo_sem_sistema_diario',
     'minutos_desligado_mensal',
-    'minutos_desligado_diario'
+    'minutos_desligado_diario',
+    'ocupacao_mensal'
   ];
 
   for (const arrayName of requiredArrays) {
