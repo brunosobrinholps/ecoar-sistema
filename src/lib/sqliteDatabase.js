@@ -27,7 +27,21 @@ export const initializeSQL = async () => {
     try {
       if (!SQL) {
         console.log('📖 Loading SQL.js library...');
-        SQL = await initSqlJs();
+        
+        // 🔧 CORREÇÃO: Configurar caminho do WASM baseado no ambiente
+        const wasmPath = import.meta.env.PROD 
+          ? '/Ecoar/assets/sql-wasm.wasm'
+          : '/node_modules/sql.js/dist/sql-wasm.wasm';
+        
+        console.log('📖 WASM path:', wasmPath);
+        
+        SQL = await initSqlJs({
+          locateFile: file => {
+            console.log('📖 Locating file:', file, '-> Using path:', wasmPath);
+            return wasmPath;
+          }
+        });
+        
         console.log('✅ SQL.js library loaded successfully');
       }
 
