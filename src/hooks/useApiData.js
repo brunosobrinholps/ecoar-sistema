@@ -87,6 +87,7 @@ export const useApiData = (deviceId = 33, includeHistory = true) => {
         // Otherwise, derive them from consumo_mensal / consumo_diario_mes_corrente without rounding
         const hasApiMonthlyWithout = Array.isArray(apiData.consumo_sem_sistema_mensal) && apiData.consumo_sem_sistema_mensal.some(v => v && Number(v) > 0);
         const hasApiDailyWithout = Array.isArray(apiData.consumo_sem_sistema_diario) && apiData.consumo_sem_sistema_diario.some(v => v && Number(v) > 0);
+        const hasApiOcupacao = Array.isArray(apiData.ocupacao_mensal) && apiData.ocupacao_mensal.length > 0;
 
         const enrichedData = {
           ...apiData,
@@ -95,7 +96,10 @@ export const useApiData = (deviceId = 33, includeHistory = true) => {
             : (apiData.consumo_mensal?.length > 0 ? apiData.consumo_mensal.map(consumo => Math.max(0, (Number(consumo) || 0) / 0.8)) : []),
           consumo_sem_sistema_diario: hasApiDailyWithout
             ? apiData.consumo_sem_sistema_diario.map(v => Math.max(0, Number(v)))
-            : (apiData.consumo_diario_mes_corrente?.length > 0 ? apiData.consumo_diario_mes_corrente.map(consumo => Math.max(0, (Number(consumo) || 0) / 0.8)) : [])
+            : (apiData.consumo_diario_mes_corrente?.length > 0 ? apiData.consumo_diario_mes_corrente.map(consumo => Math.max(0, (Number(consumo) || 0) / 0.8)) : []),
+          ocupacao_mensal: hasApiOcupacao
+            ? apiData.ocupacao_mensal.map(v => Math.max(0, Number(v)))
+            : defaultApiData.ocupacao_mensal
         };
 
         setData(enrichedData);
