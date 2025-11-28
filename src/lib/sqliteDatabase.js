@@ -1,5 +1,3 @@
-import initSqlJs from 'sql.js';
-
 let SQL = null;
 let db = null;
 const DB_STORAGE_KEY = 'ecoar_sqlite_db';
@@ -48,6 +46,8 @@ export const initializeSQL = async () => {
           const baseUrl = import.meta.env.BASE_URL || '/';
           const wasmPath = `${baseUrl}sql-wasm.wasm`;
 
+          // Dynamic import to handle sql.js module properly
+          const initSqlJs = await import('sql.js').then(mod => mod.default);
           SQL = await initSqlJs({
             locateFile: file => {
               console.log('📖 Locating WASM file:', file, '-> using path:', wasmPath);
