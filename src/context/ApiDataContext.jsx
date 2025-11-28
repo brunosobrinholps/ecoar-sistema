@@ -200,6 +200,12 @@ export const ApiDataProvider = ({ children }) => {
           aggregated.ocupacao_mensal[idx] = (aggregated.ocupacao_mensal[idx] || 0) + (Number(val) || 0);
         });
       }
+
+      if (deviceData.ocupacao_diaria) {
+        deviceData.ocupacao_diaria.forEach((val, idx) => {
+          aggregated.ocupacao_diaria[idx] = (aggregated.ocupacao_diaria[idx] || 0) + (Number(val) || 0);
+        });
+      }
     });
 
     return aggregated;
