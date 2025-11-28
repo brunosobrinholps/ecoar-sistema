@@ -257,14 +257,10 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     return getComparisonWithPreviousPeriod(filteredConsumptionData, periodFilter, selectedPeriodIndex);
   }, [filteredConsumptionData, periodFilter, selectedPeriodIndex]);
 
-  // Get monthly reduction (only used when in monthly view, should match previousPeriodComparison)
-  const monthlyReduction = useMemo(() => {
-    // Only calculate for monthly view and use the same logic as previousPeriodComparison
-    if (periodFilter !== 'monthly') {
-      return { percentChange: 0, currentValue: 0, previousValue: 0 };
-    }
+  // Get period reduction (used for both monthly and daily views)
+  const periodReduction = useMemo(() => {
     return previousPeriodComparison;
-  }, [periodFilter, previousPeriodComparison]);
+  }, [previousPeriodComparison]);
 
   // Get activation hours
   const activationHours = useMemo(() => {
@@ -741,17 +737,17 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
             </div>
           </div>
 
-          {/* Redução Mensal Card */}
-          {periodFilter === 'monthly' && (
+          {/* Redução Card */}
+          {(periodFilter === 'monthly' || periodFilter === 'daily') && (
             <div className={`bg-gradient-to-br rounded-lg p-5 shadow-md border text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit ${
-              monthlyReduction.percentChange >= 0
+              periodReduction.percentChange >= 0
                 ? 'border-[#10b981]/20'
                 : 'from-red-500 to-red-600 border-red-700/20'
             }`}
-            style={monthlyReduction.percentChange >= 0 ? { background: '#10b981' } : undefined}>
-              <p className="text-3xl font-bold mb-1 text-center">{Math.abs(monthlyReduction.percentChange).toFixed(1)}%</p>
+            style={periodReduction.percentChange >= 0 ? { background: '#10b981' } : undefined}>
+              <p className="text-3xl font-bold mb-1 text-center">{Math.abs(periodReduction.percentChange).toFixed(1)}%</p>
               <p className="text-xs font-semibold text-center leading-tight">
-                {monthlyReduction.percentChange >= 0 ? '↓ Redução' : '↑ Aumento'} Mensal
+                {periodReduction.percentChange >= 0 ? '↓ Redução' : '↑ Aumento'} {periodFilter === 'daily' ? 'Diária' : 'Mensal'}
               </p>
             </div>
           )}
