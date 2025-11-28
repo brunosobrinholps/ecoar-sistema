@@ -166,29 +166,43 @@ export const getComparisonWithPreviousPeriod = (
   filterType,
   currentPeriodIndex
 ) => {
-  if (!Array.isArray(filteredData) || filteredData.length === 0) {
+  if (!Array.isArray(filteredData) || filteredData.length < 2) {
     return { percentChange: 0, currentValue: 0, previousValue: 0 };
   }
 
   const currentIndex = Math.min(currentPeriodIndex, filteredData.length - 1);
-  const periodData = filteredData[currentIndex];
 
-  if (!periodData) {
+  if (filterType === 'daily') {
+    // Compare with previous day
+    if (currentIndex < 1) {
+      return { percentChange: 0, currentValue: 0, previousValue: 0 };
+    }
+
+    const currentValue = filteredData[currentIndex]?.consumo || 0;
+    const previousValue = filteredData[currentIndex - 1]?.consumo || 0;
+
+    if (previousValue === 0) {
+      return { percentChange: 0, currentValue, previousValue };
+    }
+
+    const percentChange = ((previousValue - currentValue) / previousValue) * 100;
+    return { percentChange, currentValue, previousValue };
+  }
+
+  // Monthly comparison
+  if (currentIndex < 1) {
     return { percentChange: 0, currentValue: 0, previousValue: 0 };
   }
 
-  // Calculate economy percentage: (consumo - consumoSemSistema) / consumo * 100
-  // where consumo = consumption without system, consumoSemSistema = consumption with system
-  const consumoWithoutSystem = periodData.consumo || 0;
-  const consumoWithSystem = periodData.consumoSemSistema || 0;
-  const economy = Math.max(0, consumoWithoutSystem - consumoWithSystem);
+  const currentValue = filteredData[currentIndex]?.consumo || 0;
+  const previousValue = filteredData[currentIndex - 1]?.consumo || 0;
 
-  if (consumoWithoutSystem === 0) {
-    return { percentChange: 0, currentValue: consumoWithSystem, previousValue: consumoWithoutSystem };
+  if (previousValue === 0) {
+    return { percentChange: 0, currentValue, previousValue };
   }
 
-  const percentChange = (economy / consumoWithoutSystem) * 100;
-  return { percentChange, currentValue: consumoWithSystem, previousValue: consumoWithoutSystem };
+  const percentChange = ((previousValue - currentValue) / previousValue) * 100;
+  return { percentChange, currentValue, previousValue };
 };
 
 /**
