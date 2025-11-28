@@ -184,10 +184,15 @@ export const saveMeta = async (deviceId, filterType, periodIndex, value) => {
     `);
 
     stmt.bind([String(deviceId), filterType, periodIndex, numValue]);
-    stmt.step();
+    const executeResult = stmt.step();
     stmt.free();
 
-    saveDatabase();
+    const saved = saveDatabase();
+    if (!saved) {
+      console.error('Failed to save database to localStorage');
+      return false;
+    }
+
     console.log(`✅ Meta saved to database: device ${deviceId}, ${filterType}, index ${periodIndex} = ${numValue}`);
     return true;
   } catch (error) {
