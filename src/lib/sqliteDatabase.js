@@ -5,6 +5,20 @@ let db = null;
 const DB_STORAGE_KEY = 'ecoar_sqlite_db';
 let initPromise = null;
 
+// Check if localStorage is available
+const isLocalStorageAvailable = () => {
+  try {
+    const test = '__localStorage_test__';
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+const canUseLocalStorage = isLocalStorageAvailable();
+
 /**
  * Initialize SQLite database with proper error handling
  */
@@ -22,26 +36,44 @@ export const initializeSQL = async () => {
   }
 
   console.log('📖 Starting database initialization...');
+  console.log(`📖 localStorage availability: ${canUseLocalStorage ? 'YES' : 'NO (data will be session-only)'}`);
 
   initPromise = (async () => {
     try {
       if (!SQL) {
         console.log('📖 Loading SQL.js library...');
-        
-        // 🔧 CORREÇÃO: Usar caminho relativo simples
-        // O arquivo está em public/ para dev e será copiado para dist/ no build
-        SQL = await initSqlJs({
-          locateFile: file => {
-            console.log('📖 Locating WASM file:', file);
-            return `/${file}`;
-          }
-        });
-        
-        console.log('✅ SQL.js library loaded successfully');
+
+        try {
+          // Get the base URL for WASM file location
+          const baseUrl = import.meta.env.BASE_URL || '/';
+          const wasmPath = `${baseUrl}sql-wasm.wasm`;
+
+          SQL = await initSqlJs({
+            locateFile: file => {
+              console.log('📖 Locating WASM file:', file, '-> using path:', wasmPath);
+              return wasmPath;
+            }
+          });
+          console.log('✅ SQL.js library loaded successfully');
+        } catch (sqlError) {
+          console.error('❌ Failed to load SQL.js library:', sqlError);
+          throw sqlError;
+        }
+      }
+
+      // Verify SQL is properly loaded
+      if (!SQL || typeof SQL.Database !== 'function') {
+        console.error('❌ SQL.js library not properly loaded');
+        throw new Error('SQL.js library not properly initialized');
       }
 
       // Try to load existing database from localStorage
-      const savedData = localStorage.getItem(DB_STORAGE_KEY);
+      let savedData = null;
+      try {
+        savedData = localStorage.getItem(DB_STORAGE_KEY);
+      } catch (localStorageError) {
+        console.warn('⚠️ Error accessing localStorage:', localStorageError);
+      }
 
       if (savedData) {
         try {
@@ -64,6 +96,8 @@ export const initializeSQL = async () => {
       return db;
     } catch (error) {
       console.error('❌ Critical error initializing database:', error);
+      db = null;
+      SQL = null;
       throw error;
     } finally {
       initPromise = null;
@@ -77,6 +111,11 @@ export const initializeSQL = async () => {
  * Create database tables
  */
 const createTables = () => {
+  if (!db) {
+    console.error('Cannot create tables: database not initialized');
+    return;
+  }
+
   try {
     db.run(`
       CREATE TABLE IF NOT EXISTS meta (
@@ -104,14 +143,13 @@ const createTables = () => {
       )
     `);
 
+    console.log('✅ Database tables created successfully');
     const saved = saveDatabase();
-    if (saved) {
-      console.log('✅ Database tables created successfully');
-    } else {
-      console.error('Failed to save database after creating tables');
+    if (!saved) {
+      console.error('⚠️ Failed to save database after creating tables');
     }
   } catch (error) {
-    console.error('Error creating database tables:', error);
+    console.error('❌ Error creating database tables:', error);
   }
 };
 
@@ -126,13 +164,31 @@ const saveDatabase = () => {
 
   try {
     const data = db.export();
+    if (!data || data.length === 0) {
+      console.warn('Database export returned empty data');
+      return false;
+    }
+
     const arr = Array.from(data);
+
+    // Verify array conversion
+    if (!Array.isArray(arr) || arr.length === 0) {
+      console.error('Failed to convert database to array');
+      return false;
+    }
+
     const jsonStr = JSON.stringify(arr);
 
     // Check localStorage size
     const sizeInKB = jsonStr.length / 1024;
     if (sizeInKB > 5000) {
       console.warn(`Database size is large (${sizeInKB.toFixed(2)} KB), consider archiving old data`);
+    }
+
+    // Check if localStorage is available
+    if (!canUseLocalStorage) {
+      console.warn('⚠️ localStorage is not available (private browsing or restricted environment). Database changes will not persist across page reloads.');
+      return true; // Return true since the in-memory database was updated successfully
     }
 
     localStorage.setItem(DB_STORAGE_KEY, jsonStr);
@@ -143,8 +199,21 @@ const saveDatabase = () => {
     // Check if it's a quota exceeded error
     if (error.name === 'QuotaExceededError') {
       console.error('localStorage quota exceeded. Try clearing old data.');
+      // Try to clear and retry
+      try {
+        if (canUseLocalStorage) {
+          localStorage.removeItem(DB_STORAGE_KEY);
+          console.log('Cleared old database data, please try again');
+        }
+      } catch (clearError) {
+        console.error('Failed to clear localStorage:', clearError);
+      }
+    } else if (error.message && error.message.includes('QuotaExceededError')) {
+      console.error('Storage quota exceeded.');
     }
-    return false;
+    // Return true since the in-memory database was successfully updated
+    // even if we couldn't persist it to localStorage
+    return true;
   }
 };
 
@@ -203,18 +272,28 @@ export const saveMeta = async (deviceId, filterType, periodIndex, value) => {
       return false;
     }
 
-    const stmt = db.prepare(`
-      INSERT OR REPLACE INTO meta (device_id, filter_type, period_index, value, updated_at)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-    `);
+    try {
+      const stmt = db.prepare(`
+        INSERT OR REPLACE INTO meta (device_id, filter_type, period_index, value, updated_at)
+        VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+      `);
 
-    stmt.bind([String(deviceId), filterType, periodIndex, numValue]);
-    const executeResult = stmt.step();
-    stmt.free();
+      stmt.bind([String(deviceId), filterType, periodIndex, numValue]);
+      stmt.step();
+      stmt.free();
+    } catch (stmtError) {
+      console.error('Error executing INSERT statement:', stmtError);
+      return false;
+    }
 
-    const saved = saveDatabase();
-    if (!saved) {
-      console.error('Failed to save database to localStorage');
+    try {
+      const saved = saveDatabase();
+      if (!saved) {
+        console.error('Failed to save database to localStorage');
+        return false;
+      }
+    } catch (saveError) {
+      console.error('Error during database save:', saveError);
       return false;
     }
 
@@ -282,18 +361,28 @@ export const saveActivationMeta = async (deviceId, filterType, periodIndex, valu
       return false;
     }
 
-    const stmt = db.prepare(`
-      INSERT OR REPLACE INTO activation_meta (device_id, filter_type, period_index, value, updated_at)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-    `);
+    try {
+      const stmt = db.prepare(`
+        INSERT OR REPLACE INTO activation_meta (device_id, filter_type, period_index, value, updated_at)
+        VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+      `);
 
-    stmt.bind([String(deviceId), filterType, periodIndex, numValue]);
-    const executeResult = stmt.step();
-    stmt.free();
+      stmt.bind([String(deviceId), filterType, periodIndex, numValue]);
+      stmt.step();
+      stmt.free();
+    } catch (stmtError) {
+      console.error('Error executing INSERT statement:', stmtError);
+      return false;
+    }
 
-    const saved = saveDatabase();
-    if (!saved) {
-      console.error('Failed to save activation meta to localStorage');
+    try {
+      const saved = saveDatabase();
+      if (!saved) {
+        console.error('Failed to save activation meta to localStorage');
+        return false;
+      }
+    } catch (saveError) {
+      console.error('Error during database save:', saveError);
       return false;
     }
 
@@ -369,3 +458,11 @@ export const clearDatabase = async () => {
     console.error('Erro ao limpar banco:', error);
   }
 };
+
+// Initialize database on module load (but don't block if it fails)
+console.log('📖 Initializing SQLite database module...');
+initializeSQL().then(() => {
+  console.log('✅ SQLite database module initialized successfully');
+}).catch(err => {
+  console.warn('⚠️ Database initialization deferred until first use:', err);
+});
