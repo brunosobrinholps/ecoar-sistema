@@ -93,6 +93,11 @@ export const initializeSQL = async () => {
  * Create database tables
  */
 const createTables = () => {
+  if (!db) {
+    console.error('Cannot create tables: database not initialized');
+    return;
+  }
+
   try {
     db.run(`
       CREATE TABLE IF NOT EXISTS meta (
@@ -120,14 +125,13 @@ const createTables = () => {
       )
     `);
 
+    console.log('✅ Database tables created successfully');
     const saved = saveDatabase();
-    if (saved) {
-      console.log('✅ Database tables created successfully');
-    } else {
-      console.error('Failed to save database after creating tables');
+    if (!saved) {
+      console.error('⚠️ Failed to save database after creating tables');
     }
   } catch (error) {
-    console.error('Error creating database tables:', error);
+    console.error('❌ Error creating database tables:', error);
   }
 };
 
