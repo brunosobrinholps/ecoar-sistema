@@ -284,10 +284,15 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     });
   }, [apiData]);
 
-  // Get monthly reduction (always compares current month with previous month)
+  // Get comparison based on selected period (monthly vs previous month, or daily vs previous day)
   const monthlyReduction = useMemo(() => {
-    return getComparisonWithPreviousPeriod(monthlyData, 'monthly', currentMonthIndex);
-  }, [monthlyData, currentMonthIndex]);
+    if (periodFilter === 'daily') {
+      // For daily view, compare selected day with previous day
+      return getComparisonWithPreviousPeriod(filteredConsumptionData, 'daily', selectedPeriodIndex);
+    }
+    // For monthly view, compare selected month with previous month
+    return getComparisonWithPreviousPeriod(monthlyData, 'monthly', selectedPeriodIndex);
+  }, [monthlyData, filteredConsumptionData, periodFilter, selectedPeriodIndex]);
 
   // Fixed monthly totals for summary section (do not change based on periodFilter)
   const fixedTotalConsumption = useMemo(() => {
