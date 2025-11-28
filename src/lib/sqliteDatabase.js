@@ -61,33 +61,42 @@ export const initializeSQL = async () => {
  * Create database tables
  */
 const createTables = () => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS meta (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      device_id TEXT NOT NULL,
-      filter_type TEXT NOT NULL,
-      period_index INTEGER NOT NULL,
-      value REAL NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(device_id, filter_type, period_index)
-    )
-  `);
+  try {
+    db.run(`
+      CREATE TABLE IF NOT EXISTS meta (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        device_id TEXT NOT NULL,
+        filter_type TEXT NOT NULL,
+        period_index INTEGER NOT NULL,
+        value REAL NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(device_id, filter_type, period_index)
+      )
+    `);
 
-  db.run(`
-    CREATE TABLE IF NOT EXISTS activation_meta (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      device_id TEXT NOT NULL,
-      filter_type TEXT NOT NULL,
-      period_index INTEGER NOT NULL,
-      value REAL NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(device_id, filter_type, period_index)
-    )
-  `);
+    db.run(`
+      CREATE TABLE IF NOT EXISTS activation_meta (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        device_id TEXT NOT NULL,
+        filter_type TEXT NOT NULL,
+        period_index INTEGER NOT NULL,
+        value REAL NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(device_id, filter_type, period_index)
+      )
+    `);
 
-  saveDatabase();
+    const saved = saveDatabase();
+    if (saved) {
+      console.log('✅ Database tables created successfully');
+    } else {
+      console.error('Failed to save database after creating tables');
+    }
+  } catch (error) {
+    console.error('Error creating database tables:', error);
+  }
 };
 
 /**
