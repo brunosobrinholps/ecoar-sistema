@@ -654,17 +654,33 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               </div>
             ) : (
               <div className="space-y-2">
-                <p className="text-3xl font-bold text-gray-900">R${ensureNonNegative(currentMeta).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                <p className="text-3xl font-bold text-gray-900">R${ensureNonNegative(displayMeta).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
                 <button
                   onClick={() => {
-                    console.log('📝 Iniciando edição de meta, valor atual:', currentMeta);
-                    setCostInputValue(currentMeta.toString());
-                    setIsEditingMeta(true);
+                    if (!isApiMetaAvailable) {
+                      console.log('📝 Iniciando edição de meta, valor atual:', currentMeta);
+                      setCostInputValue(currentMeta.toString());
+                      setIsEditingMeta(true);
+                    }
                   }}
-                  className="w-full px-3 py-2 bg-[#E8DCC8] hover:bg-[#E8DCC8] text-[#1F4532] rounded text-xs font-medium transition-colors flex items-center justify-center gap-2"
+                  disabled={isApiMetaAvailable}
+                  className={`w-full px-3 py-2 rounded text-xs font-medium transition-colors flex items-center justify-center gap-2 ${
+                    isApiMetaAvailable
+                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#E8DCC8] hover:bg-[#E8DCC8] text-[#1F4532]'
+                  }`}
                 >
-                  <Edit2 className="w-4 h-4" />
-                  Editar Meta
+                  {isApiMetaAvailable ? (
+                    <>
+                      <Lock className="w-4 h-4" />
+                      Meta (API)
+                    </>
+                  ) : (
+                    <>
+                      <Edit2 className="w-4 h-4" />
+                      Editar Meta
+                    </>
+                  )}
                 </button>
               </div>
             )}
