@@ -5,6 +5,7 @@ import { useApiDataContext } from '../context/ApiDataContext';
 import DataValidationPanel from './DataValidationPanel';
 
 const ControlCenter = () => {
+  const { apiData } = useApiDataContext();
   const [executionTimeGoals, setExecutionTimeGoals] = useState({});
   const [expandedDevice, setExpandedDevice] = useState(null);
   const [showGoalInput, setShowGoalInput] = useState(null);
