@@ -99,7 +99,9 @@ export const useApiData = (deviceId = 33, includeHistory = true) => {
 
         const enrichedData = {
           ...apiData,
-          meta: apiData.meta !== undefined && apiData.meta !== null ? Number(apiData.meta) : null,
+          meta_consumo_mensal: Array.isArray(apiData.meta_consumo_mensal)
+            ? apiData.meta_consumo_mensal.map(v => Number(v))
+            : [],
           consumo_sem_sistema_mensal: hasApiMonthlyWithout
             ? apiData.consumo_sem_sistema_mensal.map(v => Math.max(0, Number(v)))
             : (apiData.consumo_mensal?.length > 0 ? apiData.consumo_mensal.map(consumo => Math.max(0, (Number(consumo) || 0) / 0.8)) : []),
