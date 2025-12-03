@@ -47,9 +47,13 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     selectedPeriodIndex
   );
 
+  // Determine if we should use API meta (read-only) or localStorage meta (editable)
+  const isApiMetaAvailable = periodFilter === 'monthly' && apiData?.meta !== null && apiData?.meta !== undefined;
+  const displayMeta = isApiMetaAvailable ? apiData.meta : currentMeta;
+
   useEffect(() => {
-    setCostInputValue(currentMeta.toString());
-  }, [currentMeta]);
+    setCostInputValue(isApiMetaAvailable ? apiData.meta.toString() : currentMeta.toString());
+  }, [currentMeta, apiData?.meta, isApiMetaAvailable]);
 
   useEffect(() => {
     setTimeMetaInputValue(currentTimeMeta.toString());
