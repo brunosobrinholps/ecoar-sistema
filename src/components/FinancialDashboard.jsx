@@ -55,12 +55,16 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     console.log('💰 FinancialDashboard - Meta Debug:', {
       periodFilter,
       apiDataMeta: apiData?.meta,
+      apiDataMetaType: typeof apiData?.meta,
       currentMeta,
+      currentMetaType: typeof currentMeta,
       isApiMetaAvailable,
-      displayMeta
+      displayMeta,
+      displayMetaType: typeof displayMeta,
+      wholeApiData: apiData
     });
     setCostInputValue(isApiMetaAvailable ? apiData.meta.toString() : currentMeta.toString());
-  }, [currentMeta, apiData?.meta, isApiMetaAvailable]);
+  }, [currentMeta, apiData?.meta, isApiMetaAvailable, apiData]);
 
   useEffect(() => {
     setTimeMetaInputValue(currentTimeMeta.toString());
