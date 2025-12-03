@@ -5,6 +5,8 @@ const API_BASE_URL = import.meta.env.PROD
   : '/api/dados';
 
 const defaultApiData = {
+  meta_consumo_mensal: [2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500],
+  meta_consumo_diaria: [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70],
   consumo_mensal: [0.0, 0.0, 563.28, 1805.39, 2453.32, 2687.39, 2208.17, 2169.09, 1740.71, 1999.26, 1085.54, 0.0],
   consumo_diario_mes_corrente: [52.85, 49.92, 49.06, 53.5, 64.72, 60.86, 55.28, 58.17, 23.12, 0.0, 0.0, 41.38, 60.51, 54.7, 50.44, 50.61, 53.77, 53.49, 48.38, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
   consumo_sem_sistema_mensal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 286.27, 1053.23, 835.49, 734.35, 0.0],
@@ -93,6 +95,12 @@ export const useApiData = (deviceId = 33, includeHistory = true) => {
 
         const enrichedData = {
           ...apiData,
+          meta_consumo_mensal: Array.isArray(apiData.meta_consumo_mensal)
+            ? apiData.meta_consumo_mensal.map(v => Number(v))
+            : [],
+          meta_consumo_diaria: Array.isArray(apiData.meta_consumo_diaria)
+            ? apiData.meta_consumo_diaria.map(v => Number(v))
+            : [],
           consumo_sem_sistema_mensal: hasApiMonthlyWithout
             ? apiData.consumo_sem_sistema_mensal.map(v => Math.max(0, Number(v)))
             : (apiData.consumo_mensal?.length > 0 ? apiData.consumo_mensal.map(consumo => Math.max(0, (Number(consumo) || 0) / 0.8)) : []),

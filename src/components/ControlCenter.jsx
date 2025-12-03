@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Clock, Target, AlertCircle, CheckCircle, TrendingUp } from 'lucide-react';
+import { Clock, Target, AlertCircle, CheckCircle, TrendingUp, Lock } from 'lucide-react';
 import { deviceRankings } from '../data/mockData';
+import { useApiDataContext } from '../context/ApiDataContext';
 import DataValidationPanel from './DataValidationPanel';
 
 const ControlCenter = () => {
+  const { apiData } = useApiDataContext();
   const [executionTimeGoals, setExecutionTimeGoals] = useState({});
   const [expandedDevice, setExpandedDevice] = useState(null);
   const [showGoalInput, setShowGoalInput] = useState(null);
@@ -101,6 +103,20 @@ const ControlCenter = () => {
                     <p className="text-xl font-bold text-gray-900">{device.score}</p>
                   </div>
                 </div>
+
+                {/* Meta from API Section */}
+                {apiData?.meta !== null && apiData?.meta !== undefined && (
+                  <div className="bg-white/60 rounded-lg p-4 border border-blue-200 mt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Lock className="w-5 h-5 text-blue-600" />
+                        <span className="font-bold text-gray-900">Meta (API)</span>
+                      </div>
+                      <p className="text-lg font-bold text-blue-600">{apiData.meta}</p>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">Valor definido na API (somente leitura)</p>
+                  </div>
+                )}
 
                 {/* Goal Section */}
                 {isExpanded && (

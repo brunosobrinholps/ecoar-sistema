@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
-import { Calendar, TrendingDown, Edit2, Check, TrendingUp, Clock, Zap, Leaf } from 'lucide-react';
+import { Calendar, TrendingDown, Edit2, Check, TrendingUp, Clock, Zap, Leaf, Lock } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
 import GaugeChart from 'react-gauge-chart';
 import { Tooltip as UITooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
@@ -47,9 +47,28 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     selectedPeriodIndex
   );
 
+  // Determine if we should use API meta (read-only) or localStorage meta (editable)
+  let apiMetaValue = null;
+  if (periodFilter === 'monthly' && Array.isArray(apiData?.meta_consumo_mensal) && apiData.meta_consumo_mensal[selectedPeriodIndex] !== undefined) {
+    apiMetaValue = apiData.meta_consumo_mensal[selectedPeriodIndex];
+  } else if (periodFilter === 'daily' && Array.isArray(apiData?.meta_consumo_diaria) && apiData.meta_consumo_diaria[selectedPeriodIndex] !== undefined) {
+    apiMetaValue = apiData.meta_consumo_diaria[selectedPeriodIndex];
+  }
+
+  const isApiMetaAvailable = apiMetaValue !== null && apiMetaValue !== undefined;
+  const displayMeta = isApiMetaAvailable ? apiMetaValue : currentMeta;
+
   useEffect(() => {
-    setCostInputValue(currentMeta.toString());
-  }, [currentMeta]);
+    console.log('💰 FinancialDashboard - Meta Debug:', {
+      periodFilter,
+      selectedPeriodIndex,
+      apiMetaValue,
+      currentMeta,
+      isApiMetaAvailable,
+      displayMeta
+    });
+    setCostInputValue(isApiMetaAvailable ? apiMetaValue.toString() : currentMeta.toString());
+  }, [currentMeta, apiMetaValue, isApiMetaAvailable, selectedPeriodIndex, periodFilter]);
 
   useEffect(() => {
     setTimeMetaInputValue(currentTimeMeta.toString());
@@ -618,7 +637,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               </div>
               <TrendingDown className="w-4 h-4 text-[#1F4532]" />
             </div>
-            {isEditingMeta ? (
+            {isEditingMeta && !isApiMetaAvailable ? (
               <div className="space-y-2">
                 <input
                   autoFocus
@@ -650,17 +669,32 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               </div>
             ) : (
               <div className="space-y-2">
-                <p className="text-3xl font-bold text-gray-900">R${ensureNonNegative(currentMeta).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                <p className="text-3xl font-bold text-gray-900">R${ensureNonNegative(displayMeta).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
                 <button
                   onClick={() => {
-                    console.log('📝 Iniciando edição de meta, valor atual:', currentMeta);
-                    setCostInputValue(currentMeta.toString());
-                    setIsEditingMeta(true);
+                    if (!isApiMetaAvailable) {
+                      console.log('📝 Iniciando edição de meta, valor atual:', currentMeta);
+                      setCostInputValue(currentMeta.toString());
+                      setIsEditingMeta(true);
+                    }
                   }}
-                  className="w-full px-3 py-2 bg-[#E8DCC8] hover:bg-[#E8DCC8] text-[#1F4532] rounded text-xs font-medium transition-colors flex items-center justify-center gap-2"
+                  disabled={isApiMetaAvailable}
+                  className={`w-full px-3 py-2 rounded text-xs font-medium transition-colors flex items-center justify-center gap-2 ${
+                    isApiMetaAvailable
+                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#E8DCC8] hover:bg-[#E8DCC8] text-[#1F4532]'
+                  }`}
                 >
-                  <Edit2 className="w-4 h-4" />
-                  Editar Meta
+                  {isApiMetaAvailable ? (
+                    <>
+                      Meta
+                    </>
+                  ) : (
+                    <>
+                      <Edit2 className="w-4 h-4" />
+                      Editar Meta
+                    </>
+                  )}
                 </button>
               </div>
             )}
