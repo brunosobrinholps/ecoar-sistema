@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Clock, Target, AlertCircle, CheckCircle, TrendingUp } from 'lucide-react';
+import { Clock, Target, AlertCircle, CheckCircle, TrendingUp, Lock } from 'lucide-react';
 import { deviceRankings } from '../data/mockData';
+import { useApiDataContext } from '../context/ApiDataContext';
 import DataValidationPanel from './DataValidationPanel';
 
 const ControlCenter = () => {
