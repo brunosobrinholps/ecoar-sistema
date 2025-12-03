@@ -48,9 +48,13 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
   );
 
   // Determine if we should use API meta (read-only) or localStorage meta (editable)
-  const apiMetaValue = periodFilter === 'monthly' && Array.isArray(apiData?.meta_consumo_mensal) && apiData.meta_consumo_mensal[selectedPeriodIndex] !== undefined
-    ? apiData.meta_consumo_mensal[selectedPeriodIndex]
-    : null;
+  let apiMetaValue = null;
+  if (periodFilter === 'monthly' && Array.isArray(apiData?.meta_consumo_mensal) && apiData.meta_consumo_mensal[selectedPeriodIndex] !== undefined) {
+    apiMetaValue = apiData.meta_consumo_mensal[selectedPeriodIndex];
+  } else if (periodFilter === 'daily' && Array.isArray(apiData?.meta_consumo_diaria) && apiData.meta_consumo_diaria[selectedPeriodIndex] !== undefined) {
+    apiMetaValue = apiData.meta_consumo_diaria[selectedPeriodIndex];
+  }
+
   const isApiMetaAvailable = apiMetaValue !== null && apiMetaValue !== undefined;
   const displayMeta = isApiMetaAvailable ? apiMetaValue : currentMeta;
 
@@ -58,14 +62,13 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
     console.log('💰 FinancialDashboard - Meta Debug:', {
       periodFilter,
       selectedPeriodIndex,
-      apiMetaArray: apiData?.meta_consumo_mensal,
       apiMetaValue,
       currentMeta,
       isApiMetaAvailable,
       displayMeta
     });
     setCostInputValue(isApiMetaAvailable ? apiMetaValue.toString() : currentMeta.toString());
-  }, [currentMeta, apiMetaValue, isApiMetaAvailable, selectedPeriodIndex]);
+  }, [currentMeta, apiMetaValue, isApiMetaAvailable, selectedPeriodIndex, periodFilter]);
 
   useEffect(() => {
     setTimeMetaInputValue(currentTimeMeta.toString());
