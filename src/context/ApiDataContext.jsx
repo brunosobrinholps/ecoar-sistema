@@ -137,6 +137,7 @@ export const ApiDataProvider = ({ children }) => {
     if (Object.keys(devicesDataMap).length === 0) {
       return {
         meta_consumo_mensal: [],
+        meta_consumo_diaria: [],
         consumo_mensal: [],
         consumo_diario_mes_corrente: [],
         consumo_sem_sistema_mensal: [],
