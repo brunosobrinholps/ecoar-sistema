@@ -105,6 +105,12 @@ export const useApiData = (deviceId = 33, includeHistory = true) => {
           meta_consumo_diaria: Array.isArray(apiData.meta_consumo_diaria)
             ? apiData.meta_consumo_diaria.map(v => Number(v))
             : [],
+          meta_tempo_atuacao_mensal: hasApiMetaTempoMensal
+            ? apiData.meta_tempo_atuacao_mensal.map(v => Math.max(0, Number(v)))
+            : defaultApiData.meta_tempo_atuacao_mensal,
+          meta_tempo_atuacao_diaria: hasApiMetaTempoDiaria
+            ? apiData.meta_tempo_atuacao_diaria.map(v => Math.max(0, Number(v)))
+            : defaultApiData.meta_tempo_atuacao_diaria,
           consumo_sem_sistema_mensal: hasApiMonthlyWithout
             ? apiData.consumo_sem_sistema_mensal.map(v => Math.max(0, Number(v)))
             : (apiData.consumo_mensal?.length > 0 ? apiData.consumo_mensal.map(consumo => Math.max(0, (Number(consumo) || 0) / 0.8)) : []),
