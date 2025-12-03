@@ -85,12 +85,12 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
       if (periodFilter === 'daily') {
         const dailyData = apiData?.consumo_diario_mes_corrente || [];
         for (let dayIndex = 0; dayIndex < dailyData.length; dayIndex++) {
-          const meta = await loadActivationTimeMeta(selectedDeviceId, 'daily', dayIndex);
+          const meta = await loadActivationTimeMeta(selectedDeviceId, 'daily', dayIndex, apiData);
           metas[`daily_${dayIndex}`] = meta;
         }
       } else {
         for (let monthIndex = 0; monthIndex <= currentMonthIndex; monthIndex++) {
-          const meta = await loadActivationTimeMeta(selectedDeviceId, 'monthly', monthIndex);
+          const meta = await loadActivationTimeMeta(selectedDeviceId, 'monthly', monthIndex, apiData);
           metas[`monthly_${monthIndex}`] = meta;
         }
       }
