@@ -52,6 +52,13 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
   const displayMeta = isApiMetaAvailable ? apiData.meta : currentMeta;
 
   useEffect(() => {
+    console.log('💰 FinancialDashboard - Meta Debug:', {
+      periodFilter,
+      apiDataMeta: apiData?.meta,
+      currentMeta,
+      isApiMetaAvailable,
+      displayMeta
+    });
     setCostInputValue(isApiMetaAvailable ? apiData.meta.toString() : currentMeta.toString());
   }, [currentMeta, apiData?.meta, isApiMetaAvailable]);
 
