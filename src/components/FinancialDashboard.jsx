@@ -684,8 +684,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
                 >
                   {isApiMetaAvailable ? (
                     <>
-                      <Lock className="w-4 h-4" />
-                      Meta (API)
+                      Meta
                     </>
                   ) : (
                     <>
