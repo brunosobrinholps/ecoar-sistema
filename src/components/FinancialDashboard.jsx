@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
-import { Calendar, TrendingDown, Edit2, Check, TrendingUp, Clock, Zap, Leaf } from 'lucide-react';
+import { Calendar, TrendingDown, Edit2, Check, TrendingUp, Clock, Zap, Leaf, Lock } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
 import GaugeChart from 'react-gauge-chart';
 import { Tooltip as UITooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
