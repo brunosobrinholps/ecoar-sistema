@@ -824,7 +824,6 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               </div>
             </div>
             <div className="bg-blue-50/50 rounded p-2 space-y-1">
-              <p className="text-xs text-[#6B7560]">Meta: <span className="font-semibold text-gray-900">R${ensureNonNegative(displayMeta).toLocaleString('pt-BR')}</span></p>
               <p className="text-xs text-[#6B7560]">
                 Economia: <span className="font-semibold text-[#1F4532]">
                   R${ensureNonNegative((currentPeriodData?.consumo || 0) - (currentPeriodData?.consumoSemSistema || 0)).toLocaleString('pt-BR')}
