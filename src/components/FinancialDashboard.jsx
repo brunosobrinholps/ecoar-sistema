@@ -931,14 +931,14 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               </div>
             </div>
           ) : chartData.length > 0 ? (
-            <div style={{ width: '100%', height: '350px' }}>
+            <div style={{ width: '100%', height: 'clamp(250px, 80vw, 350px)' }}>
               <ReactECharts
                 option={periodFilter === 'monthly' ? getMonthlyChartOption() : getDailyChartOption()}
                 style={{ width: '100%', height: '100%' }}
               />
             </div>
           ) : (
-            <div className="h-96 flex items-center justify-center text-gray-500">
+            <div className="h-64 sm:h-96 flex items-center justify-center text-gray-500">
               <p>Nenhum dado disponível</p>
             </div>
           )}
