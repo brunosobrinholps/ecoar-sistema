@@ -824,11 +824,6 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               </div>
             </div>
             <div className="bg-blue-50/50 rounded p-2 space-y-1">
-              <p className="text-xs text-[#6B7560]">
-                Economia: <span className="font-semibold text-[#1F4532]">
-                  R${ensureNonNegative((currentPeriodData?.consumo || 0) - (currentPeriodData?.consumoSemSistema || 0)).toLocaleString('pt-BR')}
-                </span>
-              </p>
               <div className="border-t border-blue-200 pt-1 mt-1">
                 {periodFilter === 'monthly' ? (
                   <p className="text-xs text-[#6B7560]">
