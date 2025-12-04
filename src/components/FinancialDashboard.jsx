@@ -777,9 +777,9 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         {/* Right Column - Período Selecionado and Redução Mensal */}
         <div className="hidden lg:grid grid-cols-1 gap-4 col-span-1 lg:col-span-2">
           {/* Período Selecionado Card */}
-          <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg p-4 shadow-md border border-blue-200 hover:shadow-lg transition-shadow h-fit">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg p-3 sm:p-4 shadow-md border border-blue-200 hover:shadow-lg transition-shadow h-fit">
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <p className="text-xs font-bold text-blue-700 uppercase tracking-wide truncate">
                 {periodFilter === 'daily' ? `Dia ${selectedPeriodIndex + 1}` : monthNames[selectedPeriodIndex]}
               </p>
               {periodFilter === 'daily' ? (
@@ -789,13 +789,13 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
                   max={filteredConsumptionData.length - 1}
                   value={selectedPeriodIndex}
                   onChange={(e) => handlePeriodIndexChange(parseInt(e.target.value))}
-                  className="w-20"
+                  className="w-16 sm:w-20"
                 />
               ) : (
                 <select
                   value={selectedPeriodIndex}
                   onChange={(e) => handlePeriodIndexChange(parseInt(e.target.value))}
-                  className="text-xs px-2 py-1 border border-blue-300 rounded bg-white text-[#1F4532] hover:border-blue-500 transition-colors appearance-none cursor-pointer"
+                  className="text-xs px-2 py-1 border border-blue-300 rounded bg-white text-[#1F4532] hover:border-blue-500 transition-colors appearance-none cursor-pointer flex-shrink-0"
                 >
                   {monthNames.map((name, index) => (
                     <option key={index} value={String(index)}>{name}</option>
@@ -806,19 +806,19 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
             <div className="mb-3 space-y-2">
               <div>
                 <p className="text-xs text-[#6B7560] mb-1">Consumo com Sistema</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">
                   R${ensureNonNegative(currentPeriodData?.consumo || 0).toLocaleString('pt-BR')}
                 </p>
               </div>
               <div className="border-t border-blue-200 pt-2">
                 <p className="text-xs text-[#6B7560] mb-1">Economia</p>
-                <p className="text-lg font-bold text-blue-600">
+                <p className="text-base sm:text-lg font-bold text-blue-600">
                   R${ensureNonNegative(currentPeriodData?.consumoSemSistema || 0).toLocaleString('pt-BR')}
                 </p>
               </div>
               <div className="border-t border-blue-200 pt-2">
                 <p className="text-xs text-[#6B7560] mb-1">Consumo sem Sistema</p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-base sm:text-lg font-bold text-gray-900">
                   R${ensureNonNegative((currentPeriodData?.consumo || 0) + (currentPeriodData?.consumoSemSistema || 0)).toLocaleString('pt-BR')}
                 </p>
               </div>
