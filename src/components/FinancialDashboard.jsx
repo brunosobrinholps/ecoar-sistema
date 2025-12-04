@@ -909,7 +909,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
         {/* Large Graph Section */}
         <div className="col-span-1 lg:col-span-2 bg-white rounded-lg p-4 sm:p-6 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
-          <h3 className="text-sm font-bold text-gray-900 mb-1">
+          <h3 className="text-xs sm:text-sm font-bold text-gray-900 mb-1">
             Gráfico {periodFilter === 'monthly' ? 'Mensal' : 'Diário'}
           </h3>
           <p className="text-xs text-gray-500 mb-3">
@@ -917,7 +917,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           </p>
 
           {loading ? (
-            <div className="h-96 flex items-center justify-center">
+            <div className="h-64 sm:h-96 flex items-center justify-center">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600 mx-auto mb-3"></div>
                 <p className="text-xs text-[#6B7560]">Carregando dados da API...</p>
