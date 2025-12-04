@@ -945,9 +945,9 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         </div>
 
         {/* Right Panel */}
-        <div className="space-y-3">
+        <div className="space-y-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-4">
           {/* Status Card */}
-          <div className="bg-white rounded-lg p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
+          <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-bold text-[#1F4532] uppercase">Status</p>
               <Leaf className="w-4 h-4 text-[#1F4532]" />
@@ -965,15 +965,15 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           {/* Update Table */}
           <div className="bg-white rounded-lg p-3 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-bold text-[#1F4532] uppercase">{periodFilter === 'daily' ? 'Dia / Metas / Atualiz.' : 'Mês / Metas / Atualiz.'}</p>
-              <span className="text-xs text-gray-500">{monthMetaTablePageIndex + 1} / {totalPages}</span>
+              <p className="text-xs font-bold text-[#1F4532] uppercase truncate">{periodFilter === 'daily' ? 'Dia / Metas / At.' : 'Mês / Metas / At.'}</p>
+              <span className="text-xs text-gray-500 whitespace-nowrap ml-2">{monthMetaTablePageIndex + 1} / {totalPages}</span>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 max-h-40 overflow-y-auto sm:max-h-48">
               {paginatedMonthsData.map((item, index) => (
                 <div key={index} className="flex justify-between items-center text-xs border-b border-[#D4CFC0] pb-1 last:border-b-0 hover:bg-[#F0EAD2] px-1 py-0.5 rounded transition-colors">
-                  <span className="font-bold text-[#1F4532] min-w-10">{item.month}</span>
+                  <span className="font-bold text-[#1F4532] min-w-8">{item.month}</span>
                   <span className="text-[#A3B18A] flex-1 text-center font-medium text-xs">{item.value}</span>
-                  <span className="font-bold text-gray-900 text-right w-10 text-xs">{item.atualização}</span>
+                  <span className="font-bold text-gray-900 text-right w-8 text-xs">{item.atualização}</span>
                 </div>
               ))}
             </div>
@@ -983,20 +983,20 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
                 disabled={monthMetaTablePageIndex === 0}
                 className="flex-1 px-2 py-1.5 bg-[#E8DCC8] hover:bg-[#E8DCC8] disabled:bg-[#F0EAD2] disabled:text-gray-400 text-[#1F4532] rounded text-xs font-medium transition-colors"
               >
-                ← Anterior
+                ←
               </button>
               <button
                 onClick={() => setMonthMetaTablePageIndex(Math.min(totalPages - 1, monthMetaTablePageIndex + 1))}
                 disabled={monthMetaTablePageIndex >= totalPages - 1}
                 className="flex-1 px-2 py-1.5 bg-[#E8DCC8] hover:bg-[#E8DCC8] disabled:bg-[#F0EAD2] disabled:text-gray-400 text-[#1F4532] rounded text-xs font-medium transition-colors"
               >
-                Próximo →
+                →
               </button>
             </div>
           </div>
 
           {/* Activation Time */}
-          <div className="bg-white rounded-lg p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow space-y-3">
+          <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow space-y-3">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-[#A3B18A]" />
