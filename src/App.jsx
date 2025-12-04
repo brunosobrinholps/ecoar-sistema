@@ -91,7 +91,6 @@ function AppContent() {
                 />
               ) : (
                 <FinancialDashboard
-                  selectedEstablishment={selectedEstablishment}
                   onSelectDevice={setSelectedDeviceId}
                 />
               )}
