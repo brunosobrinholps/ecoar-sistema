@@ -618,9 +618,9 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         </div>
       )}
       {/* Top Metrics Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 items-start">
         {/* Left Sidebar with 4 Cards */}
-        <div className="space-y-3 lg:col-span-1">
+        <div className="space-y-3 md:col-span-1 lg:col-span-1 lg:space-y-3">
           <div className={`rounded-lg p-4 shadow-md border transition-all h-fit ${
             isEditingMeta
               ? 'bg-[#F0EAD2] border-[#D4CFC0] border-2'
@@ -733,7 +733,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         </div>
 
         {/* Economia Total - Gauge Chart */}
-        <div className="bg-white rounded-lg p-6 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow col-span-1 lg:col-span-2 flex flex-col h-auto lg:h-96">
+        <div className="bg-white rounded-lg p-6 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow col-span-1 md:col-span-2 lg:col-span-2 flex flex-col h-auto lg:h-96">
           <div className="mb-4">
             <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">
               Economia Total
@@ -775,7 +775,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         </div>
 
         {/* Right Column - Período Selecionado and Redução Mensal */}
-        <div className="flex flex-col gap-4 col-span-1 lg:col-span-2">
+        <div className="hidden lg:flex flex-col gap-4 col-span-1 lg:col-span-2">
           {/* Período Selecionado Card */}
           <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg p-4 shadow-md border border-blue-200 hover:shadow-lg transition-shadow h-fit">
             <div className="flex items-center justify-between mb-2">
@@ -906,7 +906,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
       </div>
 
       {/* Main Content - Graph and Right Panel */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         {/* Large Graph Section */}
         <div className="col-span-1 lg:col-span-2 bg-white rounded-lg p-6 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow">
           <h3 className="text-sm font-bold text-gray-900 mb-1">

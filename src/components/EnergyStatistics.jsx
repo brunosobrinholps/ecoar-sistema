@@ -24,7 +24,7 @@ const EnergyStatistics = () => {
       </div>
 
       {/* Statistics Grid */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-lg p-4 border border-teal-100">
           <p className="text-xs font-semibold text-gray-600 uppercase tracking-widest mb-2">Economia</p>
           <p className="text-2xl font-bold text-teal-700">{chartData[0].value}</p>

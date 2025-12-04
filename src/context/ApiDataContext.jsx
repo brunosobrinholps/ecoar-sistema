@@ -213,6 +213,18 @@ export const ApiDataProvider = ({ children }) => {
       }
     });
 
+    // For occupancy metrics, use device 33's values instead of summing
+    // Occupancy is a percentage metric and should show a representative device's actual value
+    const device33Data = devicesDataMap[33];
+    if (device33Data) {
+      if (device33Data.ocupacao_mensal) {
+        aggregated.ocupacao_mensal = device33Data.ocupacao_mensal.slice();
+      }
+      if (device33Data.ocupacao_diaria) {
+        aggregated.ocupacao_diaria = device33Data.ocupacao_diaria.slice();
+      }
+    }
+
     return aggregated;
   }, []);
 

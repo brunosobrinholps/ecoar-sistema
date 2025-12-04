@@ -224,7 +224,7 @@ const DashboardCharts = ({ selectedEstablishment }) => {
       </div>
 
       {/* Monthly Charts */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         {/* Cost Chart */}
         <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
           <div className="flex items-center justify-between mb-4">
@@ -349,7 +349,7 @@ const DashboardCharts = ({ selectedEstablishment }) => {
       </div>
 
       {/* Device Consumption Distribution */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
           <div className="flex items-center gap-2 mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Consumo por Dispositivo</h3>
