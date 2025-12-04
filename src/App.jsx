@@ -22,6 +22,7 @@ function AppContent() {
     const params = new URLSearchParams(window.location.search);
     return params.get('device') ? parseInt(params.get('device')) : null;
   });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { handleDeviceChange } = useApiDataContext();
 
