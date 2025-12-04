@@ -167,12 +167,12 @@ const Header = ({ selectedEstablishment, onEstablishmentChange, selectedDeviceId
               <TooltipTrigger asChild>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-3 hover:bg-[#F0EAD2] px-2 py-1 rounded-lg transition-colors"
+                  className="flex items-center gap-2 sm:gap-3 hover:bg-[#F0EAD2] px-1 sm:px-2 py-1 rounded-lg transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#A3B18A] to-[#1F4532] flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-sm">EA</span>
+                  <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gradient-to-br from-[#A3B18A] to-[#1F4532] flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-bold text-xs sm:text-sm">EA</span>
                   </div>
-                  <ChevronDown className="w-4 h-4 text-[#6B7560]" />
+                  <ChevronDown className="hidden sm:block w-4 h-4 text-[#6B7560]" />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
