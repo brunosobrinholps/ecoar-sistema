@@ -195,100 +195,30 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
 
   const handleSaveTimeMeta = async () => {
     const newValue = parseFloat(timeMetaInputValue);
-    const filterType = periodFilter === 'daily' ? 'daily' : 'monthly';
-    console.log('🔧 Attempting to save time meta:', {
+    console.log('🔧 Attempting to save monthly time meta:', {
       newValue,
       deviceId: selectedDeviceId,
       periodIndex: selectedPeriodIndex,
-      filterType,
-      isValid: !isNaN(newValue) && newValue >= 0
+      isValid: !isNaN(newValue) && newValue > 0
     });
 
-    if (!isNaN(newValue) && newValue >= 0) {
+    if (!isNaN(newValue) && newValue > 0) {
       try {
-        const success = await saveActivationTimeMeta(selectedDeviceId, filterType, selectedPeriodIndex, newValue);
+        const success = await saveActivationTimeMeta(selectedDeviceId, 'monthly', selectedPeriodIndex, newValue);
         if (success) {
           setIsEditingTimeMeta(false);
-          console.log(`✅ ${filterType === 'daily' ? 'Daily' : 'Monthly'} time meta saved successfully`);
+          console.log('✅ Monthly time meta saved successfully');
         } else {
-          console.error(`❌ Failed to save ${filterType} time meta`);
-          alert(`Erro ao salvar meta de tempo. Por favor, tente novamente.`);
+          console.error('❌ Failed to save monthly time meta');
+          alert('Erro ao salvar meta mensal de tempo. Por favor, tente novamente.');
         }
       } catch (error) {
-        console.error(`❌ Error saving ${filterType} time meta:`, error);
-        alert(`Erro ao salvar meta de tempo. Por favor, tente novamente.`);
+        console.error('❌ Error saving monthly time meta:', error);
+        alert('Erro ao salvar meta mensal de tempo. Por favor, tente novamente.');
       }
     } else {
-      console.warn('❌ Invalid value for time meta:', timeMetaInputValue);
-      alert('Por favor, insira um valor válido para a meta de tempo (≥ 0)');
-    }
-  };
-
-  const handleSaveTimeMetaFromTable = async (monthIndex) => {
-    const newValue = parseFloat(editingTimeMetaValue);
-    console.log('🔧 Attempting to save monthly time meta from table:', {
-      newValue,
-      deviceId: selectedDeviceId,
-      monthIndex,
-      isValid: !isNaN(newValue) && newValue >= 0
-    });
-
-    if (!isNaN(newValue) && newValue >= 0) {
-      try {
-        const success = await saveActivationTimeMeta(selectedDeviceId, 'monthly', monthIndex, newValue);
-        if (success) {
-          setAllActivationMetas(prev => ({
-            ...prev,
-            [`monthly_${monthIndex}`]: newValue
-          }));
-          setEditingTimeMetaId(null);
-          setEditingTimeMetaValue('');
-          console.log('✅ Monthly time meta from table saved successfully');
-        } else {
-          console.error('❌ Failed to save monthly time meta from table');
-          alert('Erro ao salvar meta de tempo. Por favor, tente novamente.');
-        }
-      } catch (error) {
-        console.error('❌ Error saving monthly time meta from table:', error);
-        alert('Erro ao salvar meta de tempo. Por favor, tente novamente.');
-      }
-    } else {
-      console.warn('❌ Invalid value for time meta:', editingTimeMetaValue);
-      alert('Por favor, insira um valor válido para a meta de tempo (≥ 0)');
-    }
-  };
-
-  const handleSaveDailyTimeMetaFromTable = async (dayIndex) => {
-    const newValue = parseFloat(editingTimeMetaValue);
-    console.log('🔧 Attempting to save daily time meta from table:', {
-      newValue,
-      deviceId: selectedDeviceId,
-      dayIndex,
-      isValid: !isNaN(newValue) && newValue >= 0
-    });
-
-    if (!isNaN(newValue) && newValue >= 0) {
-      try {
-        const success = await saveActivationTimeMeta(selectedDeviceId, 'daily', dayIndex, newValue);
-        if (success) {
-          setAllActivationMetas(prev => ({
-            ...prev,
-            [`daily_${dayIndex}`]: newValue
-          }));
-          setEditingTimeMetaId(null);
-          setEditingTimeMetaValue('');
-          console.log('✅ Daily time meta from table saved successfully');
-        } else {
-          console.error('❌ Failed to save daily time meta from table');
-          alert('Erro ao salvar meta de tempo. Por favor, tente novamente.');
-        }
-      } catch (error) {
-        console.error('❌ Error saving daily time meta from table:', error);
-        alert('Erro ao salvar meta de tempo. Por favor, tente novamente.');
-      }
-    } else {
-      console.warn('❌ Invalid value for daily time meta:', editingTimeMetaValue);
-      alert('Por favor, insira um valor válido para a meta de tempo (≥ 0)');
+      console.warn('❌ Invalid value for monthly time meta:', timeMetaInputValue);
+      alert('Por favor, insira um valor válido para a meta mensal de tempo');
     }
   };
 
