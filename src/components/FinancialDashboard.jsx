@@ -775,7 +775,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
         </div>
 
         {/* Right Column - Período Selecionado and Redução Mensal */}
-        <div className="hidden lg:flex flex-col gap-4 col-span-1 lg:col-span-2">
+        <div className="hidden lg:grid grid-cols-1 gap-4 col-span-1 lg:col-span-2">
           {/* Período Selecionado Card */}
           <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg p-4 shadow-md border border-blue-200 hover:shadow-lg transition-shadow h-fit">
             <div className="flex items-center justify-between mb-2">
