@@ -1001,23 +1001,23 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
 
           {/* Activation Time */}
           <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow space-y-3">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 gap-2">
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-[#A3B18A]" />
-                <p className="text-xs font-bold text-[#1F4532] uppercase">Tempo de Atuação</p>
+                <Clock className="w-4 sm:w-5 h-4 sm:h-5 text-[#A3B18A] flex-shrink-0" />
+                <p className="text-xs font-bold text-[#1F4532] uppercase truncate">Tempo de Atuação</p>
               </div>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               <div>
                 <p className="text-xs text-[#6B7560] font-semibold mb-1">Meta Mensal (h)</p>
-                <p className="text-lg font-bold text-[#A3B18A]">
+                <p className="text-base sm:text-lg font-bold text-[#A3B18A]">
                   {apiData?.meta_tempo_atuacao_mensal?.[selectedPeriodIndex]?.toFixed(1) || '720.0'}h
                 </p>
               </div>
               <div className="border-t border-[#E8DCC8] pt-2">
                 <p className="text-xs text-[#6B7560] font-semibold mb-1">Meta Diária (h)</p>
-                <p className="text-lg font-bold text-[#A3B18A]">
+                <p className="text-base sm:text-lg font-bold text-[#A3B18A]">
                   {apiData?.meta_tempo_atuacao_diaria?.[selectedPeriodIndex]?.toFixed(1) || '24.0'}h
                 </p>
               </div>
