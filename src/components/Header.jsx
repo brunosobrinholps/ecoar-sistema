@@ -151,9 +151,9 @@ const Header = ({ selectedEstablishment, onEstablishmentChange, selectedDeviceId
           {/* Notification Bell */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <button className="w-10 h-10 rounded-lg bg-[#E8DCC8] hover:bg-[#D4CFC0] flex items-center justify-center transition-colors relative">
-                <Bell className="w-5 h-5 text-[#1F4532]" />
-                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+              <button className="flex-shrink-0 w-9 sm:w-10 h-9 sm:h-10 rounded-lg bg-[#E8DCC8] hover:bg-[#D4CFC0] flex items-center justify-center transition-colors relative">
+                <Bell className="w-4 sm:w-5 h-4 sm:h-5 text-[#1F4532]" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
             </TooltipTrigger>
             <TooltipContent>
@@ -162,7 +162,7 @@ const Header = ({ selectedEstablishment, onEstablishmentChange, selectedDeviceId
           </Tooltip>
 
           {/* User Profile Dropdown */}
-          <div className="relative ml-4 pl-4 border-l border-[#E8DCC8]">
+          <div className="relative flex-shrink-0 ml-2 sm:ml-4 sm:pl-4 border-l border-[#E8DCC8]">
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
