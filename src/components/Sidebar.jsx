@@ -1,5 +1,6 @@
 import { LayoutDashboard, BarChart3, Settings, CheckCircle, LogOut } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
+import { useClient } from '../context/ClientContext';
 
 const Sidebar = ({ activeTab = 'dashboard', setActiveTab, onLogout, onClose }) => {
   const menuItems = [
