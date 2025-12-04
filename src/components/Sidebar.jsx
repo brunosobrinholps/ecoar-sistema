@@ -3,6 +3,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
 import { useClient } from '../context/ClientContext';
 
 const Sidebar = ({ activeTab = 'dashboard', setActiveTab, onLogout, onClose }) => {
+  const { clientName } = useClient();
   const menuItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', tooltip: 'Visualize métricas e gráficos de energia' },
     { id: 'validator', icon: CheckCircle, label: 'Validador de Dados', tooltip: 'Valide os dados recebidos da API' },
@@ -19,7 +20,7 @@ const Sidebar = ({ activeTab = 'dashboard', setActiveTab, onLogout, onClose }) =
             <span className="text-lg font-bold">E</span>
           </div>
           <div>
-            <h1 className="text-base sm:text-lg font-bold tracking-tight">Ecoar</h1>
+            <h1 className="text-base sm:text-lg font-bold tracking-tight truncate">{clientName}</h1>
           </div>
         </div>
       </div>
