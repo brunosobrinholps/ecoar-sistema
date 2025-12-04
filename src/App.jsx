@@ -66,8 +66,6 @@ function AppContent() {
       {/* Main Content */}
       <div className="flex-1 w-full">
         <Header
-          selectedEstablishment={selectedEstablishment}
-          onEstablishmentChange={setSelectedEstablishment}
           selectedDeviceId={selectedApiDeviceId}
           onDeviceChange={setSelectedApiDeviceId}
           onLogout={handleLogout}
