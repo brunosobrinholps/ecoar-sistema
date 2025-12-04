@@ -82,6 +82,10 @@ function AppContent() {
             </>
           )}
 
+          {activeSidebarTab === 'validator' && (
+            <Device39Validator />
+          )}
+
           {activeSidebarTab === 'consumption' && (
             <ConsumptionTab />
           )}
