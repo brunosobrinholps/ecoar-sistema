@@ -857,9 +857,9 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
       </div>
 
       {/* Info and Filter Bar */}
-      <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-md border border-[#E8DCC8]">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-2 bg-white rounded-lg p-3 shadow-md border border-[#E8DCC8]">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0">
             <span className="text-sm font-bold text-[#6B7560]">E</span>
           </div>
           <div>
@@ -868,21 +868,22 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500 font-medium">Período:</span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs text-gray-500 font-medium whitespace-nowrap">Período:</span>
           <div className="flex items-center gap-1">
             <UITooltip>
               <TooltipTrigger asChild>
                 <button
                   onClick={() => handlePeriodChange('monthly')}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium text-xs transition-all ${
+                  className={`flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-lg font-medium text-xs transition-all ${
                     periodFilter === 'monthly'
                       ? 'bg-[#1F4532] text-white'
                       : 'bg-[#E8DCC8] text-[#1F4532] hover:bg-[#E8DCC8]'
                   }`}
                 >
                   <Calendar className="w-3 h-3" />
-                  <span>Mensal</span>
+                  <span className="hidden sm:inline">Mensal</span>
+                  <span className="sm:hidden">M</span>
                 </button>
               </TooltipTrigger>
               <TooltipContent>Visualizar dados por mês</TooltipContent>
@@ -891,14 +892,15 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
               <TooltipTrigger asChild>
                 <button
                   onClick={() => handlePeriodChange('daily')}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium text-xs transition-all ${
+                  className={`flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-lg font-medium text-xs transition-all ${
                     periodFilter === 'daily'
                       ? 'bg-[#1F4532] text-white'
                       : 'bg-[#E8DCC8] text-[#1F4532] hover:bg-[#E8DCC8]'
                   }`}
                 >
                   <Calendar className="w-3 h-3" />
-                  <span>Diário</span>
+                  <span className="hidden sm:inline">Diário</span>
+                  <span className="sm:hidden">D</span>
                 </button>
               </TooltipTrigger>
               <TooltipContent>Visualizar dados por dia</TooltipContent>
