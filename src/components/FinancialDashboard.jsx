@@ -824,6 +824,21 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
                   R${ensureNonNegative((currentPeriodData?.consumo || 0) - (currentPeriodData?.consumoSemSistema || 0)).toLocaleString('pt-BR')}
                 </span>
               </p>
+              <div className="border-t border-blue-200 pt-1 mt-1">
+                {periodFilter === 'monthly' ? (
+                  <p className="text-xs text-[#6B7560]">
+                    Meta Economia Mensal: <span className="font-semibold text-[#1F4532]">
+                      R${ensureNonNegative(apiData?.meta_economia_mensal?.[selectedPeriodIndex] || 600).toLocaleString('pt-BR')}
+                    </span>
+                  </p>
+                ) : (
+                  <p className="text-xs text-[#6B7560]">
+                    Meta Economia Diária: <span className="font-semibold text-[#1F4532]">
+                      R${ensureNonNegative(apiData?.meta_economia_diaria?.[selectedPeriodIndex] || 20).toLocaleString('pt-BR')}
+                    </span>
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -981,114 +996,26 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           </div>
 
           {/* Activation Time */}
-          <div className="bg-white rounded-lg p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow space-y-4">
-            <div className="flex items-center justify-between">
+          <div className="bg-white rounded-lg p-4 shadow-md border border-[#E8DCC8] hover:shadow-lg transition-shadow space-y-3">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-[#A3B18A]" />
                 <p className="text-xs font-bold text-[#1F4532] uppercase">Tempo de Atuação</p>
               </div>
             </div>
-            <div className="space-y-2">
-              <p className="text-xs text-[#6B7560] font-semibold">
-                {periodFilter === 'daily' ? 'Atuação Hoje (h)' : 'Meta Mensal (h)'}
-              </p>
-              {periodFilter === 'monthly' ? (
-                isEditingTimeMeta ? (
-                  <div className="flex gap-2 items-center">
-                    <input
-                      autoFocus
-                      type="number"
-                      value={timeMetaInputValue}
-                      onChange={handleTimeMetaInputChange}
-                      onKeyPress={handleTimeMetaKeyPress}
-                      placeholder="0"
-                      className="flex-1 px-2 py-1 border-2 border-[#A3B18A] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#1F4532]"
-                    />
-                    <button
-                      onClick={handleSaveTimeMeta}
-                      className="px-2 py-1 bg-[#F0EAD2]0 hover:bg-[#1F4532] text-white rounded text-xs font-medium transition-colors"
-                      title="Salvar"
-                    >
-                      ✓
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between">
-                    <p className="text-lg font-bold text-[#A3B18A]">{currentTimeMeta.toFixed(1)}h</p>
-                    <button
-                      onClick={() => {
-                        console.log('📝 Iniciando edição de meta de tempo no card, valor atual:', currentTimeMeta);
-                        setTimeMetaInputValue(currentTimeMeta.toString());
-                        setIsEditingTimeMeta(true);
-                      }}
-                      className="px-1.5 py-0.5 bg-[#E8DCC8] hover:bg-[#D4CFC0] text-[#1F4532] rounded text-xs font-medium transition-colors"
-                      title="Editar meta"
-                    >
-                      <Edit2 className="w-3 h-3" />
-                    </button>
-                  </div>
-                )
-              ) : (
-                <p className="text-lg font-bold text-[#A3B18A]">{activationHours.toFixed(1)}h</p>
-              )}
-            </div>
-            <div className="space-y-2 border-t border-[#E8DCC8] pt-3">
-              <p className="text-xs text-[#6B7560] font-semibold mb-2">Dispositivos Ativos</p>
-              <div className="space-y-1 max-h-28 overflow-y-auto">
-                {deviceRankings.slice(0, 3).map((device) => {
-                  const deviceTimeMeta = deviceMetas[device.id] || (periodFilter === 'daily' ? 24 : 720);
-                  const isEditing = editingDeviceTimeId === device.id;
 
-                  return (
-                    <div
-                      key={device.id}
-                      className="flex items-center gap-2 text-xs bg-[#F0EAD2] p-2 rounded hover:bg-[#F0EAD2] cursor-pointer transition-colors"
-                    >
-                      <span className="text-base">{device.icon}</span>
-                      <div className="flex-1">
-                        <p className="font-semibold text-[#1F4532]">{device.name}</p>
-                        {isEditing ? (
-                          <div className="flex gap-1 mt-0.5">
-                            <input
-                              autoFocus
-                              type="number"
-                              value={deviceTimeInputValue}
-                              onChange={(e) => setDeviceTimeInputValue(e.target.value)}
-                              onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                  handleSaveDeviceTimeMeta(device.id);
-                                }
-                              }}
-                              placeholder="0"
-                              className="w-10 px-1 py-0.5 border border-[#D4CFC0] rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#1F4532]"
-                            />
-                            <button
-                              onClick={() => handleSaveDeviceTimeMeta(device.id)}
-                              className="px-1.5 py-0.5 bg-[#F0EAD2]0 hover:bg-[#1F4532] text-white rounded text-xs font-medium transition-colors"
-                              title="Salvar"
-                            >
-                              ✓
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1">
-                            <p className="text-gray-500">{deviceTimeMeta.toFixed(1)}h - Score: {device.score}</p>
-                            <button
-                              onClick={() => {
-                                setEditingDeviceTimeId(device.id);
-                                setDeviceTimeInputValue(deviceTimeMeta.toString());
-                              }}
-                              className="px-1 py-0.5 bg-[#E8DCC8] hover:bg-[#D4CFC0] text-[#1F4532] rounded text-xs font-medium transition-colors"
-                              title="Editar meta"
-                            >
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+            <div className="space-y-2.5">
+              <div>
+                <p className="text-xs text-[#6B7560] font-semibold mb-1">Meta Mensal (h)</p>
+                <p className="text-lg font-bold text-[#A3B18A]">
+                  {apiData?.meta_tempo_atuacao_mensal?.[selectedPeriodIndex]?.toFixed(1) || '720.0'}h
+                </p>
+              </div>
+              <div className="border-t border-[#E8DCC8] pt-2">
+                <p className="text-xs text-[#6B7560] font-semibold mb-1">Meta Diária (h)</p>
+                <p className="text-lg font-bold text-[#A3B18A]">
+                  {apiData?.meta_tempo_atuacao_diaria?.[selectedPeriodIndex]?.toFixed(1) || '24.0'}h
+                </p>
               </div>
             </div>
           </div>
