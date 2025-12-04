@@ -100,7 +100,7 @@ const Device39Validator = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
             <p className="text-xs text-blue-600 font-semibold">Total</p>
             <p className="text-2xl font-bold text-blue-900">{stats.total}</p>

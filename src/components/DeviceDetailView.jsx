@@ -66,7 +66,7 @@ const DeviceDetailView = ({ deviceId, onBack }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -112,7 +112,7 @@ const DeviceDetailView = ({ deviceId, onBack }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Consumo de Energia (24h)</h3>
           {loading ? (
