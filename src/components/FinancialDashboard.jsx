@@ -24,7 +24,7 @@ import {
 
 const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
-const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
+const FinancialDashboard = ({ onSelectDevice }) => {
   const { apiData, loading, error, selectedDeviceId, periodFilter, setPeriodFilter, selectedPeriodIndex, setSelectedPeriodIndex } = useApiDataContext();
 
   const [isEditingMeta, setIsEditingMeta] = useState(false);
