@@ -759,18 +759,18 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
                 />
               </div>
             </div>
-            <div className="space-y-6 flex-shrink-0">
-              <div>
-                <p className="text-xs text-[#6B7560] font-semibold mb-2">Consumo Total</p>
-                <p className="text-3xl font-bold text-gray-900">R$ {(ensureNonNegative(fixedTotalConsumption) / 1000).toFixed(1)}k</p>
+            <div className="space-y-3 sm:space-y-6 flex-shrink-0 w-full sm:w-auto px-4 sm:px-0">
+              <div className="text-center sm:text-left">
+                <p className="text-xs text-[#6B7560] font-semibold mb-1 sm:mb-2">Consumo Total</p>
+                <p className="text-lg sm:text-3xl font-bold text-gray-900">R$ {(ensureNonNegative(fixedTotalConsumption) / 1000).toFixed(1)}k</p>
               </div>
-              <div>
-                <p className="text-xs text-[#6B7560] font-semibold mb-2">Economia Alcançada</p>
-                <p className="text-3xl font-bold text-[#1F4532]">R$ {(ensureNonNegative(fixedTotalEconomy) / 1000).toFixed(1)}k</p>
+              <div className="text-center sm:text-left">
+                <p className="text-xs text-[#6B7560] font-semibold mb-1 sm:mb-2">Economia Alcançada</p>
+                <p className="text-lg sm:text-3xl font-bold text-[#1F4532]">R$ {(ensureNonNegative(fixedTotalEconomy) / 1000).toFixed(1)}k</p>
               </div>
-              <div>
-                <p className="text-xs text-[#6B7560] font-semibold mb-2">Taxa de Economia</p>
-                <p className="text-2xl font-bold text-[#A3B18A]">{fixedEconomyRate.toFixed(1)}%</p>
+              <div className="text-center sm:text-left">
+                <p className="text-xs text-[#6B7560] font-semibold mb-1 sm:mb-2">Taxa de Economia</p>
+                <p className="text-base sm:text-2xl font-bold text-[#A3B18A]">{fixedEconomyRate.toFixed(1)}%</p>
               </div>
             </div>
           </div>
