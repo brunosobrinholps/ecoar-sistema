@@ -621,7 +621,7 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 items-start">
         {/* Left Sidebar with 4 Cards */}
         <div className="space-y-3 col-span-1 sm:col-span-2 lg:col-span-1 lg:space-y-3">
-          <div className={`rounded-lg p-4 shadow-md border transition-all h-fit ${
+          <div className={`rounded-lg p-3 sm:p-4 shadow-md border transition-all h-fit ${
             isEditingMeta
               ? 'bg-[#F0EAD2] border-[#D4CFC0] border-2'
               : 'bg-white border-[#E8DCC8] hover:shadow-lg'
