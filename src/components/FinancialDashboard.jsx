@@ -703,27 +703,27 @@ const FinancialDashboard = ({ selectedEstablishment, onSelectDevice }) => {
           </div>
 
           {/* Redução Card */}
-          <div className={`bg-gradient-to-br rounded-lg p-5 shadow-md border text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit ${
+          <div className={`bg-gradient-to-br rounded-lg p-3 sm:p-5 shadow-md border text-white flex flex-col justify-center hover:shadow-lg transition-shadow h-fit ${
             previousPeriodComparison.percentChange >= 0
               ? 'border-[#10b981]/20'
               : 'from-red-500 to-red-600 border-red-700/20'
           }`}
           style={previousPeriodComparison.percentChange >= 0 ? { background: '#10b981' } : undefined}>
-            <p className="text-3xl font-bold mb-1 text-center">{Math.abs(previousPeriodComparison.percentChange).toFixed(1)}%</p>
+            <p className="text-2xl sm:text-3xl font-bold mb-1 text-center">{Math.abs(previousPeriodComparison.percentChange).toFixed(1)}%</p>
             <p className="text-xs font-semibold text-center leading-tight">
               {previousPeriodComparison.percentChange >= 0 ? '↓ Redução' : '↑ Aumento'} vs {periodFilter === 'daily' ? 'Dia anterior' : 'Mês anterior'}
             </p>
           </div>
 
           {/* Ocupação Card */}
-          <div className="bg-gradient-to-br from-[#1F4532] to-[#2D5740] rounded-lg p-4 shadow-md border border-[#1F4532]/20 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-bold text-[#F0EAD2] uppercase tracking-wide">
+          <div className="bg-gradient-to-br from-[#1F4532] to-[#2D5740] rounded-lg p-3 sm:p-4 shadow-md border border-[#1F4532]/20 hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <p className="text-xs font-bold text-[#F0EAD2] uppercase tracking-wide truncate">
                 {periodFilter === 'daily' ? 'Ocupação Diária' : 'Ocupação Mensal'}
               </p>
-              <Zap className="w-4 h-4 text-[#A3B18A]" />
+              <Zap className="w-4 h-4 text-[#A3B18A] flex-shrink-0" />
             </div>
-            <p className="text-2xl font-bold text-[#F0EAD2] mb-2">
+            <p className="text-xl sm:text-2xl font-bold text-[#F0EAD2] mb-2">
               {periodFilter === 'daily'
                 ? apiData?.ocupacao_diaria ? apiData.ocupacao_diaria[selectedPeriodIndex]?.toFixed(1) || 0 : 0
                 : apiData?.ocupacao_mensal ? apiData.ocupacao_mensal[selectedPeriodIndex]?.toFixed(1) || 0 : 0}%
