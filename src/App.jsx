@@ -120,9 +120,11 @@ function AppContent() {
 
 function App() {
   return (
-    <ApiDataProvider>
-      <AppContent />
-    </ApiDataProvider>
+    <ClientProvider>
+      <ApiDataProvider>
+        <AppContent />
+      </ApiDataProvider>
+    </ClientProvider>
   );
 }
 
