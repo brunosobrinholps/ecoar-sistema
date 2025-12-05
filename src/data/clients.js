@@ -2,7 +2,7 @@
 export const clients = [
   {
     id: 'estanplaza',
-    name: 'Estanplaza International',
+    name: 'Matriz',
     logo: 'E',
     establishments: [
       {
