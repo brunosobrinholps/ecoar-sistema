@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Clock, Target, AlertCircle, CheckCircle, TrendingUp, Lock } from 'lucide-react';
 import { deviceRankings } from '../data/mockData';
 import { useApiDataContext } from '../context/ApiDataContext';
-import DataValidationPanel from './DataValidationPanel';
+import Device39Validator from './Device39Validator';
 
 const ControlCenter = () => {
   const { apiData } = useApiDataContext();
@@ -52,7 +52,7 @@ const ControlCenter = () => {
       </div>
 
       {/* Data Validation Panel */}
-      <DataValidationPanel />
+      <Device39Validator />
 
       {/* Devices Status Grid */}
       <div className="space-y-4">
