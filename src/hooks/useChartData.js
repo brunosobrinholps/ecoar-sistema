@@ -14,15 +14,19 @@ export const useChartData = (apiData) => {
         ? Math.max(0, Number(apiData.consumo_sem_sistema_mensal[index]))
         : Math.max(0, cons / 0.8);
 
+      const monthlyTarget = Array.isArray(apiData.meta_consumo_mensal) && apiData.meta_consumo_mensal[index]
+        ? Math.max(0, Number(apiData.meta_consumo_mensal[index]) || 0)
+        : 3000;
+
       return {
         month: monthLabels[index % 12],
         cost: cons * 0.80,
         consumption: cons,
         consumoSemSistema: semSistema,
-        target: 3000
+        target: monthlyTarget
       };
     });
-  }, [apiData?.consumo_mensal, apiData?.consumo_sem_sistema_mensal]);
+  }, [apiData?.consumo_mensal, apiData?.consumo_sem_sistema_mensal, apiData?.meta_consumo_mensal]);
 
   const dailyConsumptionData = useMemo(() => {
     if (!apiData?.consumo_diario_mes_corrente || apiData.consumo_diario_mes_corrente.length === 0) {
@@ -35,14 +39,18 @@ export const useChartData = (apiData) => {
         ? Math.max(0, Number(apiData.consumo_sem_sistema_diario[index]))
         : Math.max(0, cons / 0.8);
 
+      const dailyTarget = Array.isArray(apiData.meta_consumo_diaria) && apiData.meta_consumo_diaria[index]
+        ? Math.max(0, Number(apiData.meta_consumo_diaria[index]) || 0)
+        : (4200 / 31);
+
       return {
         day: `D${index + 1}`,
         consumption: cons,
         consumoSemSistema: sem,
-        target: 4200 / 31
+        target: dailyTarget
       };
     });
-  }, [apiData?.consumo_diario_mes_corrente, apiData?.consumo_sem_sistema_diario]);
+  }, [apiData?.consumo_diario_mes_corrente, apiData?.consumo_sem_sistema_diario, apiData?.meta_consumo_diaria]);
 
   const peakHoursData = useMemo(() => {
     if (!apiData?.potencias || apiData.potencias.length === 0) {
