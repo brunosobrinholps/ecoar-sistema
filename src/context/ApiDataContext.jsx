@@ -164,6 +164,18 @@ export const ApiDataProvider = ({ children }) => {
 
     // Sum data from all devices
     Object.values(devicesDataMap).forEach((deviceData) => {
+      if (deviceData.meta_consumo_mensal) {
+        deviceData.meta_consumo_mensal.forEach((val, idx) => {
+          aggregated.meta_consumo_mensal[idx] = (aggregated.meta_consumo_mensal[idx] || 0) + (Number(val) || 0);
+        });
+      }
+
+      if (deviceData.meta_consumo_diaria) {
+        deviceData.meta_consumo_diaria.forEach((val, idx) => {
+          aggregated.meta_consumo_diaria[idx] = (aggregated.meta_consumo_diaria[idx] || 0) + (Number(val) || 0);
+        });
+      }
+
       if (deviceData.consumo_mensal) {
         deviceData.consumo_mensal.forEach((val, idx) => {
           aggregated.consumo_mensal[idx] = (aggregated.consumo_mensal[idx] || 0) + (Number(val) || 0);
