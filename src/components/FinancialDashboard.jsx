@@ -345,23 +345,23 @@ const FinancialDashboard = ({ onSelectDevice }) => {
     return filteredConsumptionData[selectedPeriodIndex] || filteredConsumptionData[0];
   }, [filteredConsumptionData, selectedPeriodIndex]);
 
-  // Calculate monthly economy percentage: (consumo_sem_sistema - consumo_com_sistema) / consumo_sem_sistema * 100
+  // Calculate monthly economy percentage: (ECONOMIA / CONSUMO SEM SISTEMA) * 100
   const monthlyEconomyPercentage = useMemo(() => {
     if (!currentPeriodData) return 0;
-    const consumoWithoutSystem = currentPeriodData.consumoSemSistema || 0;
     const consumoWithSystem = currentPeriodData.consumo || 0;
-    const economy = Math.max(0, consumoWithoutSystem - consumoWithSystem);
+    const economia = currentPeriodData.consumoSemSistema || 0;
+    const consumoSemSistema = consumoWithSystem + economia;
 
     console.log('💰 Economy Debug:', {
       period: currentPeriodData.period,
-      consumoWithoutSystem,
       consumoWithSystem,
-      economy,
-      percentage: (consumoWithoutSystem === 0 ? 0 : (economy / consumoWithoutSystem) * 100)
+      economia,
+      consumoSemSistema,
+      percentage: (consumoSemSistema === 0 ? 0 : (economia / consumoSemSistema) * 100)
     });
 
-    if (consumoWithoutSystem === 0) return 0;
-    return (economy / consumoWithoutSystem) * 100;
+    if (consumoSemSistema === 0) return 0;
+    return (economia / consumoSemSistema) * 100;
   }, [currentPeriodData]);
 
   // Economic pie data
