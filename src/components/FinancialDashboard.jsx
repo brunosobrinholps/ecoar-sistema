@@ -348,8 +348,8 @@ const FinancialDashboard = ({ onSelectDevice }) => {
   // Calculate monthly economy percentage: (consumo_sem_sistema - consumo_com_sistema) / consumo_sem_sistema * 100
   const monthlyEconomyPercentage = useMemo(() => {
     if (!currentPeriodData) return 0;
-    const consumoWithSystem = currentPeriodData.consumo || 0;
     const consumoWithoutSystem = currentPeriodData.consumoSemSistema || 0;
+    const consumoWithSystem = currentPeriodData.consumo || 0;
     const economy = Math.max(0, consumoWithoutSystem - consumoWithSystem);
 
     if (consumoWithoutSystem === 0) return 0;
