@@ -358,8 +358,8 @@ const FinancialDashboard = ({ onSelectDevice }) => {
 
   // Economic pie data
   const economyPieData = useMemo(() => {
-    const consumoWithoutSystem = currentPeriodData?.consumo || 0;
-    const consumoWithSystem = currentPeriodData?.consumoSemSistema || 0;
+    const consumoWithSystem = currentPeriodData?.consumo || 0;
+    const consumoWithoutSystem = currentPeriodData?.consumoSemSistema || 0;
 
     return [
       { name: 'Consumo com Sistema', value: Math.max(consumoWithSystem, 1), fill: '#10b981' },
