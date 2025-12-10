@@ -348,9 +348,17 @@ const FinancialDashboard = ({ onSelectDevice }) => {
   // Calculate monthly economy percentage: (consumo_sem_sistema - consumo_com_sistema) / consumo_sem_sistema * 100
   const monthlyEconomyPercentage = useMemo(() => {
     if (!currentPeriodData) return 0;
-    const consumoWithSystem = currentPeriodData.consumo || 0;
     const consumoWithoutSystem = currentPeriodData.consumoSemSistema || 0;
+    const consumoWithSystem = currentPeriodData.consumo || 0;
     const economy = Math.max(0, consumoWithoutSystem - consumoWithSystem);
+
+    console.log('💰 Economy Debug:', {
+      period: currentPeriodData.period,
+      consumoWithoutSystem,
+      consumoWithSystem,
+      economy,
+      percentage: (consumoWithoutSystem === 0 ? 0 : (economy / consumoWithoutSystem) * 100)
+    });
 
     if (consumoWithoutSystem === 0) return 0;
     return (economy / consumoWithoutSystem) * 100;
@@ -358,8 +366,8 @@ const FinancialDashboard = ({ onSelectDevice }) => {
 
   // Economic pie data
   const economyPieData = useMemo(() => {
-    const consumoWithoutSystem = currentPeriodData?.consumo || 0;
-    const consumoWithSystem = currentPeriodData?.consumoSemSistema || 0;
+    const consumoWithSystem = currentPeriodData?.consumo || 0;
+    const consumoWithoutSystem = currentPeriodData?.consumoSemSistema || 0;
 
     return [
       { name: 'Consumo com Sistema', value: Math.max(consumoWithSystem, 1), fill: '#10b981' },
