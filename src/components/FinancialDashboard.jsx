@@ -352,6 +352,14 @@ const FinancialDashboard = ({ onSelectDevice }) => {
     const consumoWithSystem = currentPeriodData.consumo || 0;
     const economy = Math.max(0, consumoWithoutSystem - consumoWithSystem);
 
+    console.log('💰 Economy Debug:', {
+      period: currentPeriodData.period,
+      consumoWithoutSystem,
+      consumoWithSystem,
+      economy,
+      percentage: (consumoWithoutSystem === 0 ? 0 : (economy / consumoWithoutSystem) * 100)
+    });
+
     if (consumoWithoutSystem === 0) return 0;
     return (economy / consumoWithoutSystem) * 100;
   }, [currentPeriodData]);
